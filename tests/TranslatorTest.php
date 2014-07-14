@@ -32,7 +32,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testReplace() {
-        $value = $this->translator->_('value: %s', ['test']);
+        $value = $this->translator->_('value: %s', array('test'));
         $this->assertSame($value, 'VALUE = test');
     }
 
@@ -47,29 +47,29 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testContextReplace() {
-        $value = $this->translator->_('context %s', ['test'], 2);
+        $value = $this->translator->_('context %s', array('test'), 2);
         $this->assertSame($value, 'context2 test2');
     }
 
     public function testContextWithoutSetupReplace() {
-        $value = $this->translator->_('context %s', ['test']);
+        $value = $this->translator->_('context %s', array('test'));
         $this->assertSame($value, 'context1 test1');
     }
 
     public function testMultiReplace() {
-        $value = $this->translator->_('string %1$s,%2$s', [1, 2]);
+        $value = $this->translator->_('string %1$s,%2$s', array(1, 2));
         $this->assertSame($value, 'STRING2:1');
     }
 
     public function testUserLocales() {
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4';
         $locales = \System\Translator::getUserLocales();
-        $this->assertSame($locales, ['ru-RU', 'ru', 'en-US', 'en']);
+        $this->assertSame($locales, array('ru-RU', 'ru', 'en-US', 'en'));
     }
 
     public function testBestLocale() {
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ru-RU,ru-UA;q=0.8,ru;q=0.6';
-        $best = \System\Translator::getBestLocale(['ru-UA', 'ru']);
+        $best = \System\Translator::getBestLocale(array('ru-UA', 'ru'));
 
         $this->assertSame($best, 'ru-UA');
     }
