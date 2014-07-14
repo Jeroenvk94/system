@@ -25,8 +25,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testFirst() {
-        
-        $this->assertSame($this->di->get('key'), 'value');
+        $this->assertTrue($this->routes['first']->isMatch('/first'));
     }
 
 }
