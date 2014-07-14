@@ -27,5 +27,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
     public function testFirst() {
         $this->assertTrue($this->routes['first']->isMatch('/first'));
     }
+    
+    public function testThird() {
+        $this->assertTrue($this->routes['third']->isMatch('/article/65'));
+        $this->assertFalse($this->routes['third']->isMatch('/article/a'));
+    }
 
 }
