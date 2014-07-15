@@ -41,7 +41,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testRouterRouteNotFound() {
-        $this->router->execute('someUri', function($route, $name) use ($this) {
+        $this->router->execute('someUri', function($route, $name) {
             $this->assertFalse($route);
         });
     }
