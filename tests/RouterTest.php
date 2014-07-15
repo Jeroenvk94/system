@@ -40,4 +40,20 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
         });
     }
 
+    public function testRouterRouteNotFound() {
+        $this->router->execute('someUri', function($route, $name) {
+            $this->assertFalse($route);
+        });
+    }
+
+    public function testException() {
+        try {
+            $this->router->execute('first', array());
+        } catch (\Exception $e) {
+            return;
+        }
+        
+        $this->fail('An expected exception has not been raised.');
+    }
+
 }

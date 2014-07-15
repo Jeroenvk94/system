@@ -39,7 +39,7 @@ class Router {
             }
             return $targetHandler(false, null);
         } else {
-            throw new Exception('Target Handler must be callable!');
+            throw new \Exception('Target Handler must be callable!');
         }
     }
 
