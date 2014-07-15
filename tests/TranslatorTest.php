@@ -73,5 +73,12 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertSame($best, 'ru-UA');
     }
+    
+    public function testBestLocaleFirst() {
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = '';
+        $best = \System\Translator::getBestLocale(array('ru-UA', 'ru'));
+
+        $this->assertSame($best, 'ru-UA');
+    }
 
 }

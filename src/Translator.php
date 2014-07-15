@@ -74,8 +74,7 @@ class Translator {
             }
         }
 
-        reset($allowedLocales);
-        return key($allowedLocales);
+        return array_shift($allowedLocales);
     }
 
 }
