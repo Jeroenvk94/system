@@ -43,7 +43,7 @@ abstract class Controller {
             if ($this->_layout == false) {
                 echo $view->fetch($this->_view, $this->view);
             } else {
-                $this->view->content = $smarty->fetch($this->_view);
+                $this->view->content = $view->fetch($this->_view);
 
                 echo $view->fetch($this->_view, $this->view);
             }
