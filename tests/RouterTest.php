@@ -9,10 +9,11 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
 
     public $router;
     public $routes = array();
-    public $baseUrl;
+    public $baseUrl = 'http://base.url/';
 
     protected function setUp() {
         $this->router = new \System\Router();
+        $this->router->setBaseUrl($this->baseUrl);
 
         $this->routes['first'] = new \System\Router\Route('/first');
         $this->routes['second'] = new \System\Router\Route('/second');
@@ -23,26 +24,30 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
         $this->router->add('regex', $this->routes['third']);
     }
 
-    public function testFirst() {
+    public function testMatching() {
         $this->assertTrue($this->routes['first']->isMatch('/first'));
-    }
-
-    public function testThird() {
         $this->assertTrue($this->routes['third']->isMatch('/article/65'));
         $this->assertFalse($this->routes['third']->isMatch('/article/a'));
     }
 
     public function testRouterExec() {
-        $this->router->execute('article/899', function($route, $name) {
+        $self = $this;
+        $this->router->execute('/article/899', function($route, $name) use ($self) {
             if ($route !== false) {
-                $this->assertSame($name, 'regex');
+                $self->assertSame($name, 'regex');
+                $self->assertSame($this->router->getRouteName(), $name);
+                $self->assertSame($this->router->getFindRoute(), $route);
+            } else {
+                $this->fail('Route not found');
             }
         });
     }
 
     public function testRouterRouteNotFound() {
-        $this->router->execute('someUri', function($route, $name) {
-            $this->assertFalse($route);
+        $self = $this;
+        $this->router->execute('someUri', function($route, $name) use ($self) {
+            $self->assertFalse($route);
+            $self->assertNull($name);
         });
     }
 
@@ -52,8 +57,14 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
         } catch (\Exception $e) {
             return;
         }
-        
+
         $this->fail('An expected exception has not been raised.');
+    }
+
+    public function testUrlBilding() {
+        $this->assertSame($this->router->getRouteUri('first'), '/first');
+        $this->assertSame($this->router->getRouteUri('regex', array('id' => 22)), '/article/22');
+        $this->assertSame($this->router->getRouteUrl('regex', array('id' => 22)), $this->baseUrl . '/article/22');
     }
 
 }
