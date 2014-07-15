@@ -34,13 +34,13 @@ class DI implements \ArrayAccess {
             self::$_shared[$offset] = $callable;
             self::$_keys[$offset] = true;
         } else {
-            throw new Exception('Value must be callable!');
+            throw new \Exception('Value must be callable!');
         }
     }
 
     public function set($offset, $value) {
         if (is_null($offset)) {
-            throw new Exception('Invalid offset!');
+            throw new \Exception('Invalid offset!');
         } else {
             self::$_keys[$offset] = true;
             self::$_container[$offset] = $value;
