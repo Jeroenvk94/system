@@ -36,7 +36,7 @@ abstract class Controller {
         if ($this->_view !== false) {
             $view = $this->di->get('view');
             
-            if (!($view instanceof System\View)) {
+            if (!($view instanceof \System\View)) {
                 throw new \Exception('DI View must be an instance of System\View');
             }
             

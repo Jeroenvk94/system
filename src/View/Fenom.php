@@ -20,7 +20,7 @@ class Fenom implements \System\View {
             $vars = (Array) $vars;
         }
 
-        $this->fenom->display($template, $vars);
+        $this->_fenom->display($template, $vars);
     }
 
     public function fetch($template, $vars = array()) {
@@ -28,6 +28,6 @@ class Fenom implements \System\View {
             $vars = (Array) $vars;
         }
 
-        $this->fenom->fetch($template, $vars);
+        $this->_fenom->fetch($template, $vars);
     }
 }
