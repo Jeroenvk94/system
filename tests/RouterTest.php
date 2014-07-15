@@ -35,8 +35,8 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
         $this->router->execute('/article/899', function($route, $name) use ($self) {
             if ($route !== false) {
                 $self->assertSame($name, 'regex');
-                $self->assertSame($this->router->getRouteName(), $name);
-                $self->assertSame($this->router->getFindRoute(), $route);
+                $self->assertSame($self->router->getRouteName(), $name);
+                $self->assertSame($self->router->getFindRoute(), $route);
             } else {
                 $this->fail('Route not found');
             }
