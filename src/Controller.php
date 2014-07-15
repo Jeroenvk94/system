@@ -40,10 +40,12 @@ abstract class Controller {
                 throw new \Exception('DI View must be an instance of System\View');
             }
             
+            $this->view->di = $this->di;
+            
             if ($this->_layout == false) {
                 echo $view->fetch($this->_view, $this->view);
             } else {
-                $this->view->content = $view->fetch($this->_view);
+                $this->view->content = $view->fetch($this->_view, $this->view);
 
                 echo $view->fetch($this->_view, $this->view);
             }
