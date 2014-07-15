@@ -32,9 +32,11 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($this->routes['third']->isMatch('/article/a'));
     }
 
-    public function routerTest() {
+    public function testRouterExec() {
         $this->router->execute('article/899', function($route, $name) {
-            $this->assertSame($name, 'regex');
+            if ($route !== false) {
+                $this->assertSame($name, 'regex');
+            }
         });
     }
 

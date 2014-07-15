@@ -37,7 +37,7 @@ class Router {
                     return $targetHandler($route, $name);
                 }
             }
-            return $targetHandler(false);
+            return $targetHandler(false, null);
         } else {
             throw new Exception('Target Handler must be callable!');
         }
