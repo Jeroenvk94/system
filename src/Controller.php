@@ -46,8 +46,8 @@ abstract class Controller {
                 echo $view->fetch($this->_view, $this->view);
             } else {
                 $this->view->content = $view->fetch($this->_view, $this->view);
-
-                echo $view->fetch($this->_view, $this->view);
+                
+                echo $view->fetch($this->_layout, $this->view);
             }
         }
     }

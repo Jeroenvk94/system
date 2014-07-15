@@ -28,6 +28,6 @@ class Fenom implements \System\View {
             $vars = (Array) $vars;
         }
 
-        $this->_fenom->fetch($template, $vars);
+        return $this->_fenom->fetch($template, $vars);
     }
 }
