@@ -9,10 +9,6 @@ setup:
 
 test:
     php_unit:
-        config: 
-            - "phpunit.xml"
-        coverage: "coverage"
-        args: "--stderr"
     php_mess_detector:
         allow_failures: true
     php_code_sniffer:
