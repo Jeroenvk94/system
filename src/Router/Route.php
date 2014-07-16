@@ -2,7 +2,7 @@
 
 namespace System\Router;
 
-class Route {
+class Route implements \System\Route {
 
     public $pattern;
     public $target;
@@ -16,7 +16,7 @@ class Route {
         return $this->pattern === $uri;
     }
 
-    public function getUrl() {
+    public function getUri() {
         return $this->pattern;
     }
 

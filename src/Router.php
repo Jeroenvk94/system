@@ -9,7 +9,7 @@ class Router {
     protected $_routeName = null;
     protected $_findRoute = false;
 
-    public function add($name, $route) {
+    public function add($name, \System\Route $route) {
         if (is_null($name)) {
             $this->_routes[] = $route;
         } else {
@@ -63,9 +63,9 @@ class Router {
     public function getRouteUri($routeName, $parameters = null) {
         if (isset($this->_routes[$routeName])) {
             if (is_array($parameters)) {
-                return $this->_routes[$routeName]->getUrl($parameters);
+                return $this->_routes[$routeName]->getUri($parameters);
             }
-            return $this->_routes[$routeName]->getUrl();
+            return $this->_routes[$routeName]->getUri();
         }
 
         return false;

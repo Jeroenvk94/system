@@ -2,7 +2,7 @@
 
 namespace System\Router;
 
-class Regex {
+class Regex implements \System\Route {
 
     public $params = array();
     public $pattern;
@@ -47,7 +47,7 @@ class Regex {
         return false;
     }
     
-    public function getUrl($parameters = array()) {
+    public function getUri($parameters = array()) {
         $result = $this->pattern;
         
         foreach ($parameters as $key => $value) {

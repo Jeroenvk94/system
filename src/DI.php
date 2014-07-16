@@ -50,8 +50,8 @@ class DI implements \ArrayAccess {
     public function get($offset) {
         if (isset(self::$_keys[$offset])) {
             if (isset(self::$_shared[$offset])) {
-                $f = self::$_shared[$offset];
-                self::$_container[$offset] = $f();
+                $constructor = self::$_shared[$offset];
+                self::$_container[$offset] = $constructor();
                 unset(self::$_shared[$offset]);
                 return self::$_container[$offset];
             } elseif (isset(self::$_container[$offset])) {
