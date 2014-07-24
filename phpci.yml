@@ -17,6 +17,6 @@ test:
         allowed_warnings: 6
     php_code_sniffer:
         standard: "PSR2"
-        allowed_warnings: 1
+        allowed_errors: 1
     php_cpd:
         allow_failures: true
