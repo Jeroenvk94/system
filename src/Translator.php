@@ -2,15 +2,18 @@
 
 namespace System;
 
-class Translator {
+class Translator
+{
 
     protected $_translations = array();
 
-    public function __construct(array $translations) {
+    public function __construct(array $translations)
+    {
         $this->_translations = $translations;
     }
 
-    public function _($key, $args = null, $context = null) {
+    public function _($key, $args = null, $context = null)
+    {
         if (isset($this->_translations[$key])) {
             if (is_array($this->_translations[$key])) {
                 if (isset($context, $this->_translations[$key][$context])) {
@@ -27,7 +30,8 @@ class Translator {
         return $this->_format($key, $args);
     }
 
-    protected function _format($string, $args) {
+    protected function _format($string, $args)
+    {
         if (is_array($args)) {
             return vsprintf($string, $args);
         }
@@ -35,7 +39,8 @@ class Translator {
         return $string;
     }
 
-    static function getUserLocales() {
+    static function getUserLocales()
+    {
         if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && strlen($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             preg_match_all('#([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?#i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $parsedValues);
 
@@ -58,7 +63,8 @@ class Translator {
         return false;
     }
 
-    static function getBestLocale(array $allowedLocales) {
+    static function getBestLocale(array $allowedLocales)
+    {
         $userLocales = self::getUserLocales();
         if ($userLocales) {
             foreach ($userLocales as $userLocale) {

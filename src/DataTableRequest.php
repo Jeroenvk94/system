@@ -2,7 +2,8 @@
 
 namespace System;
 
-class DataTableRequest {
+class DataTableRequest
+{
 
     private $_result = array(
         'start' => 0,
@@ -13,15 +14,18 @@ class DataTableRequest {
     );
     private $_allowedLength = array(10, 25, 50, 100);
 
-    public function setDisplayStart($displayStart) {
+    public function setDisplayStart($displayStart)
+    {
         $this->_result['start'] = (int) $displayStart;
     }
 
-    public function getDisplayStart() {
+    public function getDisplayStart()
+    {
         return $this->_result['start'];
     }
 
-    public function setDisplayLength($displayLength) {
+    public function setDisplayLength($displayLength)
+    {
         if (!in_array($displayLength, $this->_allowedLength)) {
             $displayLength = $this->_allowedLength[0];
         }
@@ -29,7 +33,8 @@ class DataTableRequest {
         $this->_result['length'] = $displayLength;
     }
 
-    public function getDisplayLength() {
+    public function getDisplayLength()
+    {
         return $this->_result['length'];
     }
 
@@ -44,7 +49,8 @@ class DataTableRequest {
      * 
      * @return integer
      */
-    public function getSortColumnIndex() {
+    public function getSortColumnIndex()
+    {
         $keys = array_keys($this->_result['sortColumns']);
         return $keys[0];
     }
@@ -60,7 +66,8 @@ class DataTableRequest {
      * 
      * @return string
      */
-    public function getSortDirection() {
+    public function getSortDirection()
+    {
         $values = array_values($this->_result['sortColumns']);
         return $values[0];
     }
@@ -77,35 +84,43 @@ class DataTableRequest {
      *
      * @return array
      */
-    public function getSortColumns() {
+    public function getSortColumns()
+    {
         return $this->_result['sortColumns'];
     }
 
-    public function setSortColumns($sortColumns) {
+    public function setSortColumns($sortColumns)
+    {
         $this->_result['sortColumns'] = $sortColumns;
     }
 
-    public function setSearch($search) {
+    public function setSearch($search)
+    {
         $this->_result['search'] = $search;
     }
 
-    public function getSearch() {
+    public function getSearch()
+    {
         return $this->_result['search'];
     }
 
-    public function hasSearch() {
+    public function hasSearch()
+    {
         return !(is_null($this->_result['search']) || $this->_result['search'] == '');
     }
 
-    public function setEcho($echo) {
+    public function setEcho($echo)
+    {
         $this->_result['echo'] = $echo;
     }
 
-    public function getEcho() {
+    public function getEcho()
+    {
         return $this->_result['echo'];
     }
 
-    public function setParam($name, $value) {
+    public function setParam($name, $value)
+    {
         $this->_result[$name] = $value;
     }
 
@@ -114,7 +129,8 @@ class DataTableRequest {
      * 
      * @param array $request
      */
-    public function getRequest(array $request, $params = array(), $multisort = false) {
+    public function getRequest(array $request, $params = array(), $multisort = false)
+    {
         $this->setDisplayLength($request['iDisplayLength']);
         $this->setDisplayStart($request['iDisplayStart']);
         $this->setEcho($request['sEcho']);
@@ -143,12 +159,14 @@ class DataTableRequest {
 
         return $this->_result;
     }
-    
-    public function getResult() {
+
+    public function getResult()
+    {
         return $this->_result;
     }
 
-    public function buildEmptyResult() {
+    public function buildEmptyResult()
+    {
         return array(
             'aaData' => array(),
             'iTotalRecords' => 0,
@@ -158,10 +176,12 @@ class DataTableRequest {
 
 }
 
-class DataTableRequestParamNotExists extends \Exception {
+class DataTableRequestParamNotExists extends \Exception
+{
     
 }
 
-class DataTableRequestInvalidData extends \Exception {
+class DataTableRequestInvalidData extends \Exception
+{
     
 }

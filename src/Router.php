@@ -2,14 +2,16 @@
 
 namespace System;
 
-class Router {
+class Router
+{
 
     protected $_routes = array();
     protected $_baseUrl = '';
     protected $_routeName = null;
     protected $_findRoute = false;
 
-    public function add($name, \System\Route $route) {
+    public function add($name, \System\Route $route)
+    {
         if (is_null($name)) {
             $this->_routes[] = $route;
         } else {
@@ -17,15 +19,18 @@ class Router {
         }
     }
 
-    public function setBaseUrl($value) {
+    public function setBaseUrl($value)
+    {
         $this->_baseUrl = $value;
     }
 
-    public function getBaseUrl() {
+    public function getBaseUrl()
+    {
         return $this->_baseUrl;
     }
 
-    public function execute($uri, $targetHandler, $set = true) {
+    public function execute($uri, $targetHandler, $set = true)
+    {
         if (is_callable($targetHandler)) {
             foreach ($this->_routes as $name => $route) {
                 if ($route->isMatch($uri)) {
@@ -43,15 +48,18 @@ class Router {
         }
     }
 
-    public function getFindRoute() {
+    public function getFindRoute()
+    {
         return $this->_findRoute;
     }
 
-    public function getRouteName() {
+    public function getRouteName()
+    {
         return $this->_routeName;
     }
 
-    public function getRouteUrl($routeName, $parameters = null) {
+    public function getRouteUrl($routeName, $parameters = null)
+    {
         $uri = $this->getRouteUri($routeName, $parameters);
         if ($uri !== false) {
             return $this->_baseUrl . $uri;
@@ -60,7 +68,8 @@ class Router {
         return false;
     }
 
-    public function getRouteUri($routeName, $parameters = null) {
+    public function getRouteUri($routeName, $parameters = null)
+    {
         if (isset($this->_routes[$routeName])) {
             if (is_array($parameters)) {
                 return $this->_routes[$routeName]->getUri($parameters);

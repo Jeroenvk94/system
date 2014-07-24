@@ -2,21 +2,25 @@
 
 namespace System\Router;
 
-class Route implements \System\Route {
+class Route implements \System\Route
+{
 
     public $pattern;
     public $target;
 
-    public function __construct($pattern, $target = null) {
+    public function __construct($pattern, $target = null)
+    {
         $this->pattern = $pattern;
         $this->target = $target;
     }
 
-    public function isMatch($uri) {
+    public function isMatch($uri)
+    {
         return $this->pattern === $uri;
     }
 
-    public function getUri() {
+    public function getUri()
+    {
         return $this->pattern;
     }
 

@@ -7,7 +7,8 @@ namespace System;
  * 
  * @author Rastor
  */
-interface View {
+interface View
+{
 
     public function fetch($template, $vars = array());
 

@@ -7,29 +7,35 @@ namespace System;
  *
  * @author Rastor
  */
-class DI implements \ArrayAccess {
+class DI implements \ArrayAccess
+{
 
     private static $_container = array();
     private static $_shared = array();
     private static $_keys = array();
 
-    public function offsetSet($offset, $value) {
+    public function offsetSet($offset, $value)
+    {
         $this->set($offset, $value);
     }
 
-    public function offsetExists($offset) {
+    public function offsetExists($offset)
+    {
         return isset(self::$_keys[$offset]);
     }
 
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset)
+    {
         unset(self::$_keys[$offset], self::$_container[$offset], self::$_shared[$offset]);
     }
 
-    public function offsetGet($offset) {
+    public function offsetGet($offset)
+    {
         return $this->get($offset);
     }
 
-    public function setShared($offset, $callable) {
+    public function setShared($offset, $callable)
+    {
         if (is_callable($callable)) {
             self::$_shared[$offset] = $callable;
             self::$_keys[$offset] = true;
@@ -38,7 +44,8 @@ class DI implements \ArrayAccess {
         }
     }
 
-    public function set($offset, $value) {
+    public function set($offset, $value)
+    {
         if (is_null($offset)) {
             throw new \Exception('Invalid offset!');
         } else {
@@ -47,7 +54,8 @@ class DI implements \ArrayAccess {
         }
     }
 
-    public function get($offset) {
+    public function get($offset)
+    {
         if (isset(self::$_keys[$offset])) {
             if (isset(self::$_shared[$offset])) {
                 $constructor = self::$_shared[$offset];
