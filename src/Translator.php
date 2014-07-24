@@ -41,8 +41,11 @@ class Translator
     public static function getUserLocales()
     {
         if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && strlen($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-            preg_match_all('#([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?#i',
-                    $_SERVER['HTTP_ACCEPT_LANGUAGE'], $parsedValues);
+            preg_match_all(
+                '#([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?#i',
+                $_SERVER['HTTP_ACCEPT_LANGUAGE'],
+                $parsedValues
+            );
 
             if (count($parsedValues[1])) {
                 $result = array_combine($parsedValues[1], $parsedValues[4]);
