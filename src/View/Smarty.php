@@ -8,19 +8,21 @@ namespace System\View;
  *
  * @author Orest
  */
-class Smarty implements \System\View {
-
+class Smarty implements \System\View
+{
     protected $smarty;
 
-    public function __construct(\Smarty $smarty) {
+    public function __construct(\Smarty $smarty)
+    {
         $this->smarty = $smarty;
     }
 
-    public function display($template, $vars = array()) {
+    public function display($template, $vars = array())
+    {
         if (!is_array($vars)) {
             $vars = (Array) $vars;
         }
-        
+
         $this->smarty->clear_all_assign();
         foreach ($vars as $key => $value) {
             $this->smarty->assign($key, $value);
@@ -29,11 +31,12 @@ class Smarty implements \System\View {
         $this->smarty->display($template, $vars);
     }
 
-    public function fetch($template, $vars = array()) {
+    public function fetch($template, $vars = array())
+    {
         if (!is_array($vars)) {
             $vars = (Array) $vars;
         }
-        
+
         $this->smarty->clear_all_assign();
         foreach ($vars as $key => $value) {
             $this->smarty->assign($key, $value);

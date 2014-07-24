@@ -11,7 +11,7 @@ class DataTableRequest
         'search' => null,
         'echo' => 0
     );
-    private $_allowedLength = array(10, 25, 50, 100);
+    private $allowedLength = array(10, 25, 50, 100);
 
     public function setDisplayStart($displayStart)
     {
@@ -25,8 +25,8 @@ class DataTableRequest
 
     public function setDisplayLength($displayLength)
     {
-        if (!in_array($displayLength, $this->_allowedLength)) {
-            $displayLength = $this->_allowedLength[0];
+        if (!in_array($displayLength, $this->allowedLength)) {
+            $displayLength = $this->allowedLength[0];
         }
 
         $this->result['length'] = $displayLength;

@@ -52,7 +52,9 @@ class FlashMessages
     {
         $result = '';
         foreach ($_SESSION[$this->sessionKey] as $item) {
-            $result .= "<div class=\"{$this->classes[$item['type']]}\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><i class=\"{$this->icons[$item['type']]}\"></i>{$item['message']}</div>";
+            $result .= "<div class=\"{$this->classes[$item['type']]}\"><button type=\"button\" "
+                    . "class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>"
+                    . "<i class=\"{$this->icons[$item['type']]}\"></i>{$item['message']}</div>";
         }
         $this->clear();
 

@@ -8,7 +8,6 @@ namespace System\View;
  */
 class Native implements \System\View
 {
-
     public function display($template, $vars = array())
     {
         echo $this->fetch($template, $vars);
@@ -25,5 +24,4 @@ class Native implements \System\View
         include $template;
         return ob_get_clean();
     }
-
 }

@@ -16,20 +16,20 @@ class Translator
         if (isset($this->translations[$key])) {
             if (is_array($this->translations[$key])) {
                 if (isset($context, $this->translations[$key][$context])) {
-                    return $this->_format($this->translations[$key][$context], $args);
+                    return $this->format($this->translations[$key][$context], $args);
                 }
 
                 reset($this->translations[$key]);
-                return $this->_format(current($this->translations[$key]), $args);
+                return $this->format(current($this->translations[$key]), $args);
             } else {
-                return $this->_format($this->translations[$key], $args);
+                return $this->format($this->translations[$key], $args);
             }
         }
 
-        return $this->_format($key, $args);
+        return $this->format($key, $args);
     }
 
-    protected function _format($string, $args)
+    protected function format($string, $args)
     {
         if (is_array($args)) {
             return vsprintf($string, $args);
@@ -38,10 +38,11 @@ class Translator
         return $string;
     }
 
-    static function getUserLocales()
+    public static function getUserLocales()
     {
         if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && strlen($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-            preg_match_all('#([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?#i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $parsedValues);
+            preg_match_all('#([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?#i',
+                    $_SERVER['HTTP_ACCEPT_LANGUAGE'], $parsedValues);
 
             if (count($parsedValues[1])) {
                 $result = array_combine($parsedValues[1], $parsedValues[4]);
@@ -62,7 +63,7 @@ class Translator
         return false;
     }
 
-    static function getBestLocale(array $allowedLocales)
+    public static function getBestLocale(array $allowedLocales)
     {
         $userLocales = self::getUserLocales();
         if ($userLocales) {

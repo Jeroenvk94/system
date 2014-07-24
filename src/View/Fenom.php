@@ -8,15 +8,17 @@ namespace System\View;
  *
  * @author Orest
  */
-class Fenom implements \System\View {
-
+class Fenom implements \System\View
+{
     protected $fenom;
 
-    public function __construct(\Fenom $fenom) {
+    public function __construct(\Fenom $fenom)
+    {
         $this->fenom = $fenom;
     }
 
-    public function display($template, $vars = array()) {
+    public function display($template, $vars = array())
+    {
         if (!is_array($vars)) {
             $vars = (Array) $vars;
         }
@@ -24,7 +26,8 @@ class Fenom implements \System\View {
         $this->fenom->display($template, $vars);
     }
 
-    public function fetch($template, $vars = array()) {
+    public function fetch($template, $vars = array())
+    {
         if (!is_array($vars)) {
             $vars = (Array) $vars;
         }

@@ -21,20 +21,11 @@ abstract class Controller
         $this->view = new \stdClass();
     }
 
-    protected function _init()
-    {
-        
-    }
+    protected function init();
 
-    protected function _preAction()
-    {
-        
-    }
+    protected function preAction();
 
-    protected function _postAction()
-    {
-        
-    }
+    protected function postAction();
 
     public function response()
     {
