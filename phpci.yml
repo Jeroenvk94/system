@@ -14,8 +14,9 @@ test:
         coverage: "coverage"
         args: "--stderr"
     php_mess_detector:
-        allow_failures: true
+        allowed_warnings: 6
     php_code_sniffer:
         standard: "PSR2"
+        allowed_warnings: 1
     php_cpd:
         allow_failures: true
