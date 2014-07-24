@@ -3,7 +3,9 @@
 namespace System\View;
 
 /**
- * Description of Fenom
+ * View adapter for Fenom template engine
+ * 
+ * Fenom on github: https://github.com/bzick/fenom
  *
  * @author Orest
  */
