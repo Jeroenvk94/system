@@ -16,7 +16,7 @@ class Regex implements \System\Route
         $this->conditions = $conditions;
     }
 
-    public static function replace($matches)
+    public function replace($matches)
     {
         $key = str_replace(':', '', $matches[0]);
         if (array_key_exists($key, $this->conditions)) {
