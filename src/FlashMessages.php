@@ -70,5 +70,4 @@ class FlashMessages
     {
         return $_SESSION[$this->sessionKey];
     }
-
 }

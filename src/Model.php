@@ -23,5 +23,4 @@ abstract class Model
     {
         return $this->di['db'];
     }
-
 }

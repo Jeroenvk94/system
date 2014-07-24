@@ -1,4 +1,5 @@
 <?php
+
 namespace System;
 
 abstract class Controller
@@ -21,11 +22,20 @@ abstract class Controller
         $this->view = new \stdClass();
     }
 
-    protected function init();
+    protected function init()
+    {
+        //init actions
+    }
 
-    protected function preAction();
+    protected function preAction()
+    {
+        //actions before call controller action
+    }
 
-    protected function postAction();
+    protected function postAction()
+    {
+        //actions after call controller action
+    }
 
     public function response()
     {
@@ -101,7 +111,8 @@ abstract class Controller
 
     public function isAjaxRequest()
     {
-        return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+        return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) 
+                && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
     }
 
     public function redirect($url, $statusCode = 302)
@@ -109,5 +120,4 @@ abstract class Controller
         header('Location: ' . $url, true, $statusCode);
         die;
     }
-
 }

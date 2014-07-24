@@ -137,7 +137,7 @@ class DataTableRequest
 
         foreach ($params as $name) {
             if (!isset($request[$name])) {
-                throw new DataTableRequestParamNotExists("Required Parameter '{$name}' not found in request!");
+                throw new Exception("Required Parameter '{$name}' not found in request!");
             }
 
             $this->setParam($name, $request[$name]);
@@ -172,15 +172,4 @@ class DataTableRequest
             'iTotalDisplayRecords' => 0
         );
     }
-
-}
-
-class DataTableRequestParamNotExists extends \Exception
-{
-    
-}
-
-class DataTableRequestInvalidData extends \Exception
-{
-    
 }

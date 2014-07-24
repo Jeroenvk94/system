@@ -85,5 +85,4 @@ class Translator
 
         return array_shift($allowedLocales);
     }
-
 }

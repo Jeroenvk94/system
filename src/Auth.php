@@ -30,5 +30,4 @@ class Auth
     {
         unset($_SESSION[$this->authKey]);
     }
-
 }
