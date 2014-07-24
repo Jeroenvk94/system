@@ -1,5 +1,4 @@
 <?php
-
 namespace System\Router;
 
 class Regex implements \System\Route
