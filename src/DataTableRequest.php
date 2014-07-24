@@ -4,7 +4,7 @@ namespace System;
 class DataTableRequest
 {
 
-    private $_result = array(
+    private $result = array(
         'start' => 0,
         'length' => 10,
         'sortColumns' => array(),
@@ -15,12 +15,12 @@ class DataTableRequest
 
     public function setDisplayStart($displayStart)
     {
-        $this->_result['start'] = (int) $displayStart;
+        $this->result['start'] = (int) $displayStart;
     }
 
     public function getDisplayStart()
     {
-        return $this->_result['start'];
+        return $this->result['start'];
     }
 
     public function setDisplayLength($displayLength)
@@ -29,12 +29,12 @@ class DataTableRequest
             $displayLength = $this->_allowedLength[0];
         }
 
-        $this->_result['length'] = $displayLength;
+        $this->result['length'] = $displayLength;
     }
 
     public function getDisplayLength()
     {
-        return $this->_result['length'];
+        return $this->result['length'];
     }
 
     /**
@@ -50,7 +50,7 @@ class DataTableRequest
      */
     public function getSortColumnIndex()
     {
-        $keys = array_keys($this->_result['sortColumns']);
+        $keys = array_keys($this->result['sortColumns']);
         return $keys[0];
     }
 
@@ -67,7 +67,7 @@ class DataTableRequest
      */
     public function getSortDirection()
     {
-        $values = array_values($this->_result['sortColumns']);
+        $values = array_values($this->result['sortColumns']);
         return $values[0];
     }
 
@@ -85,42 +85,42 @@ class DataTableRequest
      */
     public function getSortColumns()
     {
-        return $this->_result['sortColumns'];
+        return $this->result['sortColumns'];
     }
 
     public function setSortColumns($sortColumns)
     {
-        $this->_result['sortColumns'] = $sortColumns;
+        $this->result['sortColumns'] = $sortColumns;
     }
 
     public function setSearch($search)
     {
-        $this->_result['search'] = $search;
+        $this->result['search'] = $search;
     }
 
     public function getSearch()
     {
-        return $this->_result['search'];
+        return $this->result['search'];
     }
 
     public function hasSearch()
     {
-        return !(is_null($this->_result['search']) || $this->_result['search'] == '');
+        return !(is_null($this->result['search']) || $this->result['search'] == '');
     }
 
     public function setEcho($echo)
     {
-        $this->_result['echo'] = $echo;
+        $this->result['echo'] = $echo;
     }
 
     public function getEcho()
     {
-        return $this->_result['echo'];
+        return $this->result['echo'];
     }
 
     public function setParam($name, $value)
     {
-        $this->_result[$name] = $value;
+        $this->result[$name] = $value;
     }
 
     /**
@@ -156,12 +156,12 @@ class DataTableRequest
 
         $this->setSortColumns($sortCols);
 
-        return $this->_result;
+        return $this->result;
     }
 
     public function getResult()
     {
-        return $this->_result;
+        return $this->result;
     }
 
     public function buildEmptyResult()

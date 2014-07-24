@@ -10,10 +10,10 @@ namespace System\View;
  */
 class Smarty implements \System\View {
 
-    protected $_smarty;
+    protected $smarty;
 
     public function __construct(\Smarty $smarty) {
-        $this->_smarty = $smarty;
+        $this->smarty = $smarty;
     }
 
     public function display($template, $vars = array()) {
@@ -21,12 +21,12 @@ class Smarty implements \System\View {
             $vars = (Array) $vars;
         }
         
-        $this->_smarty->clear_all_assign();
+        $this->smarty->clear_all_assign();
         foreach ($vars as $key => $value) {
-            $this->_smarty->assign($key, $value);
+            $this->smarty->assign($key, $value);
         }
 
-        $this->_smarty->display($template, $vars);
+        $this->smarty->display($template, $vars);
     }
 
     public function fetch($template, $vars = array()) {
@@ -34,11 +34,11 @@ class Smarty implements \System\View {
             $vars = (Array) $vars;
         }
         
-        $this->_smarty->clear_all_assign();
+        $this->smarty->clear_all_assign();
         foreach ($vars as $key => $value) {
-            $this->_smarty->assign($key, $value);
+            $this->smarty->assign($key, $value);
         }
 
-        return $this->_smarty->fetch($template, $vars);
+        return $this->smarty->fetch($template, $vars);
     }
 }

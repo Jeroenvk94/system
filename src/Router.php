@@ -4,38 +4,38 @@ namespace System;
 class Router
 {
 
-    protected $_routes = array();
-    protected $_baseUrl = '';
-    protected $_routeName = null;
-    protected $_findRoute = false;
+    protected $routes = array();
+    protected $baseUrl = '';
+    protected $routeName = null;
+    protected $findRoute = false;
 
     public function add($name, \System\Route $route)
     {
         if (is_null($name)) {
-            $this->_routes[] = $route;
+            $this->routes[] = $route;
         } else {
-            $this->_routes[$name] = $route;
+            $this->routes[$name] = $route;
         }
     }
 
     public function setBaseUrl($value)
     {
-        $this->_baseUrl = $value;
+        $this->baseUrl = $value;
     }
 
     public function getBaseUrl()
     {
-        return $this->_baseUrl;
+        return $this->baseUrl;
     }
 
     public function execute($uri, $targetHandler, $set = true)
     {
         if (is_callable($targetHandler)) {
-            foreach ($this->_routes as $name => $route) {
+            foreach ($this->routes as $name => $route) {
                 if ($route->isMatch($uri)) {
                     if ($set) {
-                        $this->_routeName = $name;
-                        $this->_findRoute = $route;
+                        $this->routeName = $name;
+                        $this->findRoute = $route;
                     }
 
                     return $targetHandler($route, $name);
@@ -49,19 +49,19 @@ class Router
 
     public function getFindRoute()
     {
-        return $this->_findRoute;
+        return $this->findRoute;
     }
 
     public function getRouteName()
     {
-        return $this->_routeName;
+        return $this->routeName;
     }
 
     public function getRouteUrl($routeName, $parameters = null)
     {
         $uri = $this->getRouteUri($routeName, $parameters);
         if ($uri !== false) {
-            return $this->_baseUrl . $uri;
+            return $this->baseUrl . $uri;
         }
 
         return false;
@@ -69,11 +69,11 @@ class Router
 
     public function getRouteUri($routeName, $parameters = null)
     {
-        if (isset($this->_routes[$routeName])) {
+        if (isset($this->routes[$routeName])) {
             if (is_array($parameters)) {
-                return $this->_routes[$routeName]->getUri($parameters);
+                return $this->routes[$routeName]->getUri($parameters);
             }
-            return $this->_routes[$routeName]->getUri();
+            return $this->routes[$routeName]->getUri();
         }
 
         return false;

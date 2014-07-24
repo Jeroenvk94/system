@@ -9,14 +9,14 @@ class FlashMessages
     const ERROR = 3;
     const SUCCESS = 4;
 
-    private $_sessionKey = '_flashMessages';
-    private $_classes = array(
+    private $sessionKey = '_flashMessages';
+    private $classes = array(
         self::INFO => 'alert alert-info',
         self::WARNING => 'alert alert-block',
         self::ERROR => 'alert alert-danger',
         self::SUCCESS => 'alert alert-success',
     );
-    private $_icons = array(
+    private $icons = array(
         self::INFO => 'fa fa-info-circle sign',
         self::WARNING => 'fa fa-warning sign',
         self::ERROR => 'fa fa-times-circle sign',
@@ -25,19 +25,19 @@ class FlashMessages
 
     public function __construct()
     {
-        if (!isset($_SESSION[$this->_sessionKey])) {
+        if (!isset($_SESSION[$this->sessionKey])) {
             $this->clear();
         }
     }
 
     public function clear()
     {
-        $_SESSION[$this->_sessionKey] = array();
+        $_SESSION[$this->sessionKey] = array();
     }
 
     public function add($type, $message)
     {
-        $_SESSION[$this->_sessionKey][] = array(
+        $_SESSION[$this->sessionKey][] = array(
             'type' => (int) $type,
             'message' => $message
         );
@@ -45,14 +45,14 @@ class FlashMessages
 
     public function setClasses($array)
     {
-        $this->_classes = $array;
+        $this->classes = $array;
     }
 
     public function __toString()
     {
         $result = '';
-        foreach ($_SESSION[$this->_sessionKey] as $item) {
-            $result .= "<div class=\"{$this->_classes[$item['type']]}\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><i class=\"{$this->_icons[$item['type']]}\"></i>{$item['message']}</div>";
+        foreach ($_SESSION[$this->sessionKey] as $item) {
+            $result .= "<div class=\"{$this->classes[$item['type']]}\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><i class=\"{$this->icons[$item['type']]}\"></i>{$item['message']}</div>";
         }
         $this->clear();
 
@@ -66,7 +66,7 @@ class FlashMessages
 
     public function getData()
     {
-        return $_SESSION[$this->_sessionKey];
+        return $_SESSION[$this->sessionKey];
     }
 
 }

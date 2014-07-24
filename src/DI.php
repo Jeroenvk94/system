@@ -9,9 +9,9 @@ namespace System;
 class DI implements \ArrayAccess
 {
 
-    private static $_container = array();
-    private static $_shared = array();
-    private static $_keys = array();
+    private static $container = array();
+    private static $shared = array();
+    private static $keys = array();
 
     public function offsetSet($offset, $value)
     {
@@ -20,12 +20,12 @@ class DI implements \ArrayAccess
 
     public function offsetExists($offset)
     {
-        return isset(self::$_keys[$offset]);
+        return isset(self::$keys[$offset]);
     }
 
     public function offsetUnset($offset)
     {
-        unset(self::$_keys[$offset], self::$_container[$offset], self::$_shared[$offset]);
+        unset(self::$keys[$offset], self::$container[$offset], self::$shared[$offset]);
     }
 
     public function offsetGet($offset)
@@ -36,8 +36,8 @@ class DI implements \ArrayAccess
     public function setShared($offset, $callable)
     {
         if (is_callable($callable)) {
-            self::$_shared[$offset] = $callable;
-            self::$_keys[$offset] = true;
+            self::$shared[$offset] = $callable;
+            self::$keys[$offset] = true;
         } else {
             throw new \Exception('Value must be callable!');
         }
@@ -48,21 +48,21 @@ class DI implements \ArrayAccess
         if (is_null($offset)) {
             throw new \Exception('Invalid offset!');
         } else {
-            self::$_keys[$offset] = true;
-            self::$_container[$offset] = $value;
+            self::$keys[$offset] = true;
+            self::$container[$offset] = $value;
         }
     }
 
     public function get($offset)
     {
-        if (isset(self::$_keys[$offset])) {
-            if (isset(self::$_shared[$offset])) {
-                $constructor = self::$_shared[$offset];
-                self::$_container[$offset] = $constructor();
-                unset(self::$_shared[$offset]);
-                return self::$_container[$offset];
-            } elseif (isset(self::$_container[$offset])) {
-                return self::$_container[$offset];
+        if (isset(self::$keys[$offset])) {
+            if (isset(self::$shared[$offset])) {
+                $constructor = self::$shared[$offset];
+                self::$container[$offset] = $constructor();
+                unset(self::$shared[$offset]);
+                return self::$container[$offset];
+            } elseif (isset(self::$container[$offset])) {
+                return self::$container[$offset];
             }
         }
 

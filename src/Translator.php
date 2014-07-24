@@ -4,25 +4,25 @@ namespace System;
 class Translator
 {
 
-    protected $_translations = array();
+    protected $translations = array();
 
     public function __construct(array $translations)
     {
-        $this->_translations = $translations;
+        $this->translations = $translations;
     }
 
     public function _($key, $args = null, $context = null)
     {
-        if (isset($this->_translations[$key])) {
-            if (is_array($this->_translations[$key])) {
-                if (isset($context, $this->_translations[$key][$context])) {
-                    return $this->_format($this->_translations[$key][$context], $args);
+        if (isset($this->translations[$key])) {
+            if (is_array($this->translations[$key])) {
+                if (isset($context, $this->translations[$key][$context])) {
+                    return $this->_format($this->translations[$key][$context], $args);
                 }
 
-                reset($this->_translations[$key]);
-                return $this->_format(current($this->_translations[$key]), $args);
+                reset($this->translations[$key]);
+                return $this->_format(current($this->translations[$key]), $args);
             } else {
-                return $this->_format($this->_translations[$key], $args);
+                return $this->_format($this->translations[$key], $args);
             }
         }
 

@@ -4,8 +4,8 @@ namespace System;
 abstract class Controller
 {
 
-    protected $_layout = 'index.htm';
-    protected $_view = 'index/index.htm';
+    protected $layoutTemplate = 'index.htm';
+    protected $viewTemplate = 'index/index.htm';
     public $view;
     public $params = array();
 
@@ -38,7 +38,7 @@ abstract class Controller
 
     public function response()
     {
-        if ($this->_view !== false) {
+        if ($this->viewTemplate !== false) {
             $view = $this->di->get('view');
 
             if (!($view instanceof \System\View)) {
@@ -47,12 +47,12 @@ abstract class Controller
 
             $this->view->di = $this->di;
 
-            if ($this->_layout == false) {
-                echo $view->fetch($this->_view, $this->view);
+            if ($this->layoutTemplate == false) {
+                echo $view->fetch($this->viewTemplate, $this->view);
             } else {
-                $this->view->content = $view->fetch($this->_view, $this->view);
+                $this->view->content = $view->fetch($this->viewTemplate, $this->view);
 
-                echo $view->fetch($this->_layout, $this->view);
+                echo $view->fetch($this->layoutTemplate, $this->view);
             }
         }
     }
@@ -80,22 +80,22 @@ abstract class Controller
 
     public function setLayout($template)
     {
-        $this->_layout = $template;
+        $this->layoutTemplate = $template;
     }
 
     public function setView($template)
     {
-        $this->_view = $template;
+        $this->viewTemplate = $template;
     }
 
     public function disableView()
     {
-        $this->_view = false;
+        $this->viewTemplate = false;
     }
 
     public function disableLayout()
     {
-        $this->_layout = false;
+        $this->layoutTemplate = false;
     }
 
     public function setParams($params)

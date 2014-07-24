@@ -2,7 +2,7 @@
 namespace System;
 
 /**
- * View adapter
+ * View adapter interface
  * 
  * @author Rastor
  */

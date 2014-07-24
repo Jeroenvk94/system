@@ -10,10 +10,10 @@ namespace System\View;
  */
 class Fenom implements \System\View {
 
-    protected $_fenom;
+    protected $fenom;
 
     public function __construct(\Fenom $fenom) {
-        $this->_fenom = $fenom;
+        $this->fenom = $fenom;
     }
 
     public function display($template, $vars = array()) {
@@ -21,7 +21,7 @@ class Fenom implements \System\View {
             $vars = (Array) $vars;
         }
 
-        $this->_fenom->display($template, $vars);
+        $this->fenom->display($template, $vars);
     }
 
     public function fetch($template, $vars = array()) {
@@ -29,6 +29,6 @@ class Fenom implements \System\View {
             $vars = (Array) $vars;
         }
 
-        return $this->_fenom->fetch($template, $vars);
+        return $this->fenom->fetch($template, $vars);
     }
 }

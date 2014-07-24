@@ -7,20 +7,20 @@ class Regex implements \System\Route
     public $params = array();
     public $pattern;
     public $target;
-    private $_conditions;
+    private $conditions;
 
     public function __construct($pattern, $target, $conditions = array())
     {
         $this->pattern = $pattern;
         $this->target = $target;
-        $this->_conditions = $conditions;
+        $this->conditions = $conditions;
     }
 
-    function replace($matches)
+    public static function replace($matches)
     {
         $key = str_replace(':', '', $matches[0]);
-        if (array_key_exists($key, $this->_conditions)) {
-            return '(' . $this->_conditions[$key] . ')';
+        if (array_key_exists($key, $this->conditions)) {
+            return '(' . $this->conditions[$key] . ')';
         } else {
             return '([a-zA-Z0-9_\+\-%]+)';
         }
