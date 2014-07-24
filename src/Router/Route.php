@@ -22,5 +22,4 @@ class Route implements \System\Route
     {
         return $this->pattern;
     }
-
 }

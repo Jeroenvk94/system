@@ -60,5 +60,4 @@ class Regex implements \System\Route
 
         return $result;
     }
-
 }

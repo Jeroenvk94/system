@@ -16,7 +16,7 @@ abstract class Controller
      */
     public $di;
 
-    public final function __construct($di)
+    final public function __construct($di)
     {
         $this->di = $di;
         $this->view = new \stdClass();
