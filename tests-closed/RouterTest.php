@@ -73,5 +73,4 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->router->getRouteUri('regex', array('id' => 22)), '/article/22');
         $this->assertSame($this->router->getRouteUrl('regex', array('id' => 22)), $this->baseUrl . '/article/22');
     }
-
 }

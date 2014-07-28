@@ -61,10 +61,10 @@ abstract class Controller
     public function callAction($name)
     {
         if (method_exists($this, $name . 'Action')) {
-            $this->_init();
-            $this->_preAction();
+            $this->init();
+            $this->preAction();
             $this->{$name . 'Action'}();
-            $this->_postAction();
+            $this->postAction();
             $this->response();
             return true;
         }

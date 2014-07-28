@@ -1,4 +1,5 @@
 <?php
+
 namespace System;
 
 class Translator
@@ -42,9 +43,7 @@ class Translator
     {
         if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && strlen($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             preg_match_all(
-                '#([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?#i',
-                $_SERVER['HTTP_ACCEPT_LANGUAGE'],
-                $parsedValues
+                    '#([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?#i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $parsedValues
             );
 
             if (count($parsedValues[1])) {
@@ -76,7 +75,7 @@ class Translator
                 }
 
                 foreach ($allowedLocales as $locale) {
-                    if (\Locale::getPrimaryLanguage($locale) == $userLocale) {
+                    if (\Locale::getPrimaryLanguage($userLocale) == $userLocale) {
                         return $locale;
                     }
                 }
@@ -85,4 +84,5 @@ class Translator
 
         return array_shift($allowedLocales);
     }
+
 }
