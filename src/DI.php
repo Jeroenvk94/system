@@ -36,10 +36,6 @@ class DI implements \ArrayAccess
 
     public function setShared($offset, $callable)
     {
-        if (is_null($offset)) {
-            throw new \Exception('Invalid offset!');
-        }
-
         if (!is_callable($callable)) {
             throw new \Exception('Value must be callable!');
         }

@@ -57,9 +57,7 @@ class DITest extends \PHPUnit_Framework_TestCase
     public function testShared2()
     {
         try {
-            $this->di->setShared('key3', function() {
-                return 'value3';
-            });
+            $this->di->setShared('key2', null);
         } catch (\Exception $e) {
             return;
         }

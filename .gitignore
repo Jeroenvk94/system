@@ -1,6 +1,6 @@
 /nbproject
 /vendor
-/report
+/reports
 /sandbox/tmp/*
 composer.lock
 composer.phar
