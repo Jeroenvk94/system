@@ -1,4 +1,5 @@
 <?php
+
 namespace System\Router;
 
 class Regex implements \System\Route
@@ -9,7 +10,7 @@ class Regex implements \System\Route
     public $target;
     private $conditions;
 
-    public function __construct($pattern, $target, $conditions = array())
+    public function __construct($pattern, $target = null, $conditions = array())
     {
         $this->pattern = $pattern;
         $this->target = $target;
@@ -22,7 +23,7 @@ class Regex implements \System\Route
         if (array_key_exists($key, $this->conditions)) {
             return '(' . $this->conditions[$key] . ')';
         } else {
-            return '([a-zA-Z0-9_\+\-%]+)';
+            return '([^/]+)';
         }
     }
 
@@ -60,4 +61,10 @@ class Regex implements \System\Route
 
         return $result;
     }
+
+    public function getParams()
+    {
+        return $this->params;
+    }
+
 }

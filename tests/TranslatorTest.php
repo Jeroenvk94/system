@@ -92,10 +92,10 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
     
     public function testBestLocale1()
     {
-        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ru-RU,ru-UA;q=0.8,ru;q=0.6';
-        $best = \System\Translator::getBestLocale(array('ru', 'ru-UA'));
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ru,uk-UA;q=0.8,en;q=0.6';
+        $best = \System\Translator::getBestLocale(array('ru', 'uk-UA'));
 
-        $this->assertSame($best, 'ru-UA');
+        $this->assertSame($best, 'ru');
     }
     
     public function testBestLocaleFirst2()
@@ -121,23 +121,4 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($best, 'ru-RU');
     }
-    
-/*    
-
-    public function testBestLocale()
-    {
-        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ru-RU,ru-UA;q=0.8,ru;q=0.6';
-        $best = \System\Translator::getBestLocale(array('ru-UA', 'ru'));
-
-        $this->assertSame($best, 'ru-UA');
-    }
-
-    public function testBestLocaleFirst()
-    {
-        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = '';
-        $best = \System\Translator::getBestLocale(array('ru-UA', 'ru'));
-
-        $this->assertSame($best, 'ru-UA');
-    }*/
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace System;
 
 class Router
@@ -9,9 +10,17 @@ class Router
     protected $routeName = null;
     protected $findRoute = false;
 
-    public function add($name, \System\Route $route)
+    public function add($name, $route = null)
     {
-        if (is_null($name)) {
+        if (is_null($route)) {
+            $route = $name;
+        }
+        
+        if (!($route instanceof \System\Route)) {
+            throw new \Exception("Invalid Route object");
+        }
+        
+        if ($name === $route) {
             $this->routes[] = $route;
         } else {
             $this->routes[$name] = $route;
@@ -78,4 +87,5 @@ class Router
 
         return false;
     }
+
 }

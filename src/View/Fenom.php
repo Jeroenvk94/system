@@ -19,11 +19,7 @@ class Fenom implements \System\View
 
     public function display($template, $vars = array())
     {
-        if (!is_array($vars)) {
-            $vars = (Array) $vars;
-        }
-
-        $this->fenom->display($template, $vars);
+        echo $this->fetch($template, $vars);
     }
 
     public function fetch($template, $vars = array())

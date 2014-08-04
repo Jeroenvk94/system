@@ -3,7 +3,6 @@ namespace System\View;
 
 /**
  * View adapter for Smarty template engine
- * 
  * Smarty homepage: www.smarty.net
  *
  * @author Orest
@@ -19,16 +18,7 @@ class Smarty implements \System\View
 
     public function display($template, $vars = array())
     {
-        if (!is_array($vars)) {
-            $vars = (Array) $vars;
-        }
-
-        $this->smarty->clear_all_assign();
-        foreach ($vars as $key => $value) {
-            $this->smarty->assign($key, $value);
-        }
-
-        $this->smarty->display($template, $vars);
+        echo $this->smarty->fetch($template, $vars);
     }
 
     public function fetch($template, $vars = array())
@@ -37,7 +27,7 @@ class Smarty implements \System\View
             $vars = (Array) $vars;
         }
 
-        $this->smarty->clear_all_assign();
+        $this->smarty->clearAllAssign();
         foreach ($vars as $key => $value) {
             $this->smarty->assign($key, $value);
         }

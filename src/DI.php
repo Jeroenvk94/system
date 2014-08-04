@@ -1,4 +1,5 @@
 <?php
+
 namespace System;
 
 /**
@@ -35,22 +36,26 @@ class DI implements \ArrayAccess
 
     public function setShared($offset, $callable)
     {
-        if (is_callable($callable)) {
-            self::$shared[$offset] = $callable;
-            self::$keys[$offset] = true;
-        } else {
+        if (is_null($offset)) {
+            throw new \Exception('Invalid offset!');
+        }
+
+        if (!is_callable($callable)) {
             throw new \Exception('Value must be callable!');
         }
+
+        self::$shared[$offset] = $callable;
+        self::$keys[$offset] = true;
     }
 
     public function set($offset, $value)
     {
         if (is_null($offset)) {
             throw new \Exception('Invalid offset!');
-        } else {
-            self::$keys[$offset] = true;
-            self::$container[$offset] = $value;
         }
+
+        self::$keys[$offset] = true;
+        self::$container[$offset] = $value;
     }
 
     public function get($offset)
@@ -68,4 +73,5 @@ class DI implements \ArrayAccess
 
         return null;
     }
+
 }

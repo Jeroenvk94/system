@@ -1,0 +1,1 @@
+<a href="{$lnk}">{$text}</a>

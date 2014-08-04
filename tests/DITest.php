@@ -21,18 +21,50 @@ class DITest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->di->get('key'), 'value');
     }
 
+    public function testIsSet1()
+    {
+        $this->di->set('key', 'value');
+        $this->assertTrue(isset($this->di['key']));
+    }
+    
+    public function testIsSet2()
+    {
+        $this->di->set('key1', 'value1');
+        $this->assertFalse(isset($this->di['key2']));
+    }
+    
+    public function testUnset()
+    {
+        $this->di->set('key2', 'value2');
+        unset($this->di['key2']);
+        $this->assertFalse(isset($this->di['key2']));
+    }
+
     public function testSimpleArraySetGet()
     {
         $this->di['key'] = 'value';
         $this->assertSame($this->di['key'], 'value');
     }
 
-    public function testShared()
+    public function testShared1()
     {
         $this->di->setShared('key2', function() {
-            return 'value';
+            return 'value2';
         });
-        $this->assertSame($this->di['key2'], 'value');
+        $this->assertSame($this->di['key2'], 'value2');
+    }
+    
+    public function testShared2()
+    {
+        try {
+            $this->di->setShared('key3', function() {
+                return 'value3';
+            });
+        } catch (\Exception $e) {
+            return;
+        }
+
+        $this->fail('An expected exception has not been raised.');
     }
 
     public function testRewriteShared()

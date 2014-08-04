@@ -1,4 +1,5 @@
 <?php
+
 namespace System\View;
 
 /**
@@ -8,6 +9,9 @@ namespace System\View;
  */
 class Native implements \System\View
 {
+
+    private $viewPath = '';
+    
     public function display($template, $vars = array())
     {
         echo $this->fetch($template, $vars);
@@ -21,7 +25,13 @@ class Native implements \System\View
 
         ob_start();
         extract($vars);
-        include $template;
+        include $this->viewPath . $template;
         return ob_get_clean();
     }
+
+    public function setViewPath($path)
+    {
+        $this->viewPath = $path;
+    }
+
 }
