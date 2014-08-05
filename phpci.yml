@@ -7,6 +7,9 @@ build_settings:
 setup:
     composer:
         action: "install"
+    shell:
+        - "mkdir sandbox/tmp"
+        - "chmod 0775 sandbox/tmp"
 
 test:
     php_unit:
@@ -20,5 +23,7 @@ test:
         standard: "PSR2"
         allowed_errors: true
         allowed_warnings: true
+        ignore:
+            - "reports"
     php_cpd:
         allow_failures: true
