@@ -8,8 +8,8 @@ setup:
     composer:
         action: "install"
     shell:
-        - "mkdir sandbox/tmp"
-        - "chmod 0775 sandbox/tmp"
+        - "cd %BUILD_PATH% && mkdir sandbox/tmp"
+        - "cd %BUILD_PATH% && chmod 0775 sandbox/tmp"
 
 test:
     php_unit:
