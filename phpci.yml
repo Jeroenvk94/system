@@ -2,6 +2,7 @@ build_settings:
     ignore:
         - "vendor"
         - "tests"
+        - "reports"
 
 setup:
     composer:
