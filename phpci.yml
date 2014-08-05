@@ -16,7 +16,6 @@ test:
         config: 
             - "phpunit.xml"
         coverage: "coverage"
-        args: "--stderr"
     php_mess_detector:
         allowed_warnings: true
     php_code_sniffer:
