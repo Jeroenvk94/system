@@ -42,7 +42,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this->router->add('first', $this->routes['first']);
         $this->router->execute('/first', function($route) use ($self) {
-            $self->assertEquals($route, $this->routes['first']);
+            $self->assertEquals($route, $self->routes['first']);
         });
     }
 
