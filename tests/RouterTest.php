@@ -42,7 +42,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this->router->add('first', $this->routes['first']);
         $this->router->execute('/first', function($route) use ($self) {
-            $self->assertEquals($route, $this->routes['first']);
+            $self->assertEquals($route, $self->routes['first']);
         });
     }
 
@@ -51,7 +51,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this->router->add('second', $this->routes['second']);
         $this->router->execute('/article/5', function($route) use ($self) {
-            $self->assertEquals($route, $this->routes['second']);
+            $self->assertEquals($route, $self->routes['second']);
         });
     }
 
@@ -60,7 +60,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this->router->add('third', $this->routes['third']);
         $this->router->execute('/setKey/a/5', function($route) use ($self) {
-            $self->assertEquals($route, $this->routes['third']);
+            $self->assertEquals($route, $self->routes['third']);
         });
     }
 
@@ -69,7 +69,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this->router->add($this->routes['noName']);
         $this->router->execute('/noName', function($route) use ($self) {
-            $self->assertEquals($route, $this->routes['noName']);
+            $self->assertEquals($route, $self->routes['noName']);
         });
     }
 
