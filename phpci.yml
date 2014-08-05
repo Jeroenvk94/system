@@ -25,5 +25,6 @@ test:
         allowed_warnings: true
         ignore:
             - "reports"
+            - "vendor"
     php_cpd:
         allow_failures: true
