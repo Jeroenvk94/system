@@ -1,4 +1,5 @@
 <?php
+namespace System\Tests;
 
 /**
  * 
@@ -46,5 +47,4 @@ class NativeViewTest extends \PHPUnit_Framework_TestCase
             'text' => 'a.com'
         ));
     }
-
 }

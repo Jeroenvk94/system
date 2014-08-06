@@ -1,4 +1,5 @@
 <?php
+namespace System\Tests;
 
 /**
  * 
@@ -48,7 +49,7 @@ class DITest extends \PHPUnit_Framework_TestCase
 
     public function testShared1()
     {
-        $this->di->setShared('key2', function() {
+        $this->di->setShared('key2', function () {
             return 'value2';
         });
         $this->assertSame($this->di['key2'], 'value2');
@@ -67,15 +68,14 @@ class DITest extends \PHPUnit_Framework_TestCase
 
     public function testRewriteShared()
     {
-        $this->di->setShared('key3', function() {
+        $this->di->setShared('key3', function () {
             return 'value';
         });
         $this->di['key3'];
-        $this->di->setShared('key3', function() {
+        $this->di->setShared('key3', function () {
             return 'value2';
         });
 
         $this->assertSame($this->di['key3'], 'value2');
     }
-
 }

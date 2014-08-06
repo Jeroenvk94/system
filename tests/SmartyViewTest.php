@@ -1,4 +1,5 @@
 <?php
+namespace System\Tests;
 
 /**
  * 
@@ -60,5 +61,4 @@ class SmartyViewTest extends \PHPUnit_Framework_TestCase
             'text' => 'a.com'
         ));
     }
-
 }

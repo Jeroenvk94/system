@@ -1,4 +1,5 @@
 <?php
+namespace System\Tests;
 
 /**
  * 
@@ -51,5 +52,4 @@ class FenomViewTest extends \PHPUnit_Framework_TestCase
             'text' => 'a.com'
         ));
     }
-
 }

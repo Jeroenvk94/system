@@ -1,4 +1,5 @@
 <?php
+namespace System\Tests;
 
 /**
  * 
@@ -41,7 +42,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $self = $this;
         $this->router->add('first', $this->routes['first']);
-        $this->router->execute('/first', function($route) use ($self) {
+        $this->router->execute('/first', function ($route) use ($self) {
             $self->assertEquals($route, $self->routes['first']);
         });
     }
@@ -50,7 +51,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $self = $this;
         $this->router->add('second', $this->routes['second']);
-        $this->router->execute('/article/5', function($route) use ($self) {
+        $this->router->execute('/article/5', function ($route) use ($self) {
             $self->assertEquals($route, $self->routes['second']);
         });
     }
@@ -59,7 +60,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $self = $this;
         $this->router->add('third', $this->routes['third']);
-        $this->router->execute('/setKey/a/5', function($route) use ($self) {
+        $this->router->execute('/setKey/a/5', function ($route) use ($self) {
             $self->assertEquals($route, $self->routes['third']);
         });
     }
@@ -68,7 +69,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $self = $this;
         $this->router->add($this->routes['noName']);
-        $this->router->execute('/noName', function($route) use ($self) {
+        $this->router->execute('/noName', function ($route) use ($self) {
             $self->assertEquals($route, $self->routes['noName']);
         });
     }
@@ -77,7 +78,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $self = $this;
         $this->router->add('third', $this->routes['third']);
-        $this->router->execute('/setKey/foo/bar', function($route) use ($self) {
+        $this->router->execute('/setKey/foo/bar', function ($route) use ($self) {
             $self->assertEquals($route->getParams(), array(
                 'key' => 'foo',
                 'value' => 'bar'
@@ -108,7 +109,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRouterExecSetup()
     {
         $self = $this;
-        $this->router->execute('/article/899', function($route, $name) use ($self) {
+        $this->router->execute('/article/899', function ($route, $name) use ($self) {
             if ($route !== false) {
                 $self->assertEquals(array(
                     $self->router->getRouteName(),
@@ -126,7 +127,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRouterRouteNotFound()
     {
         $self = $this;
-        $this->router->execute('someUri', function($route) use ($self) {
+        $this->router->execute('someUri', function ($route) use ($self) {
             $self->assertFalse($route);
         });
     }
@@ -156,5 +157,4 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->routes['second']->isMatch('/article/a'));
     }
-
 }
