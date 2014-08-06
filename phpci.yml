@@ -10,14 +10,11 @@ setup:
     shell:
         - "cd %BUILD_PATH% && mkdir sandbox/tmp"
         - "cd %BUILD_PATH% && chmod 0775 sandbox/tmp"
-        - "cd %BUILD_PATH%/../coverage && mkdir system"
-        - "cd %BUILD_PATH%/../coverage && chmod 0775 system"
 
 test:
     php_unit:
         config: 
             - "phpunit.xml"
-        coverage: "coverage"
     php_mess_detector:
         allowed_warnings: 10
     php_code_sniffer:
@@ -32,7 +29,3 @@ test:
         allow_failures: true
     php_loc:
     pdepend:
-
-complete:
-    shell:
-        - "mv %BUILD_PATH%/coverage %BUILD_PATH%/../coverage/system"
