@@ -22,16 +22,33 @@ class DITest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->di->get('key'), 'value');
     }
 
-    public function testIsSet1()
+    public function testSet1()
     {
         $this->di->set('key', 'value');
         $this->assertTrue(isset($this->di['key']));
     }
     
-    public function testIsSet2()
+    public function testSet2()
     {
         $this->di->set('key1', 'value1');
         $this->assertFalse(isset($this->di['key2']));
+    }
+    
+    public function testSet3()
+    {
+        try {
+            $this->di->set(null, 'value');
+        } catch (\Exception $e) {
+            return;
+        }
+
+        $this->fail('An expected exception has not been raised.');
+    }
+    
+    public function testGet()
+    {
+        $value = $this->di->get('someKey');
+        $this->assertNull($value);
     }
     
     public function testUnset()
