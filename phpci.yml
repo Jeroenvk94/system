@@ -15,15 +15,16 @@ test:
     php_unit:
         config: 
             - "phpunit.xml"
-        coverage: "coverage"
+        coverage: "logs/coverage"
     php_mess_detector:
-        allowed_warnings: true
+        allowed_warnings: 10
     php_code_sniffer:
         standard: "PSR2"
-        allowed_errors: true
-        allowed_warnings: true
+        allowed_errors: 10
+        allowed_warnings: 10
         ignore:
-            - "reports"
             - "vendor"
+            - "reports"
+            - "sandbox"
     php_cpd:
         allow_failures: true

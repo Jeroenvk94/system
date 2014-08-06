@@ -33,12 +33,6 @@ class DITest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(isset($this->di['key2']));
     }
     
-    public function testLoh()
-    {
-        $this->di->set('key10', 'value');
-        $this->assertFalse(isset($this->di['key10']));
-    }
-    
     public function testUnset()
     {
         $this->di->set('key2', 'value2');
