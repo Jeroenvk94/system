@@ -27,7 +27,7 @@ test:
             - "sandbox"
     php_cpd:
         allow_failures: true
-    php_lint:
+    lint:
         directories:
             - "src"
     php_loc:
