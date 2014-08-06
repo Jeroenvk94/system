@@ -17,7 +17,7 @@ test:
             - "phpunit.xml"
         coverage: "logs/coverage"
     php_mess_detector:
-        allowed_warnings: true
+        allowed_warnings: 10
     php_code_sniffer:
         standard: "PSR2"
         allowed_errors: 10
@@ -29,4 +29,6 @@ test:
     php_cpd:
         allow_failures: true
     php_loc:
+        directory: "src"
+    pdepend:
         directory: "src"
