@@ -15,7 +15,7 @@ test:
     php_unit:
         config: 
             - "phpunit.xml"
-        coverage: "logs/coverage"
+        coverage: "../coverage/system"
     php_mess_detector:
         allowed_warnings: 10
     php_code_sniffer:
