@@ -12,17 +12,23 @@ class SmartyViewTest extends \PHPUnit_Framework_TestCase
     public $viewPath;
     public $compilePath;
 
+    public static function setUpBeforeClass()
+    {
+        //setup default timezone for Smarty class
+        date_default_timezone_set('UTC');
+    }
+
     protected function setUp()
     {
         $this->viewPath = dirname(__FILE__) . '/../sandbox/templates/smarty/';
         $this->compilePath = dirname(__FILE__) . '/../sandbox/tmp/';
-        
+
         $smarty = new \Smarty();
         $smarty->setTemplateDir($this->viewPath)
                 ->setCompileDir($this->compilePath);
-        
+
         $smarty->force_compile = true;
-        
+
         $this->view = new \System\View\Smarty($smarty);
     }
 
