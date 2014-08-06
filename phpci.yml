@@ -29,4 +29,5 @@ test:
     php_cpd:
         allow_failures: true
     php_loc:
+        directory: "src"
     pdepend:
