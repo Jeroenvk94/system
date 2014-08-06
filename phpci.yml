@@ -2,7 +2,7 @@ build_settings:
     ignore:
         - "vendor"
         - "tests"
-        - "reports"
+        - "sandbox"
 
 setup:
     composer:
@@ -29,5 +29,4 @@ test:
     php_cpd:
         allow_failures: true
     php_loc:
-        directory: "src"
     pdepend:
