@@ -16,7 +16,6 @@ class NativeViewTest extends \PHPUnit_Framework_TestCase
         $this->viewPath = dirname(__FILE__) . '/../sandbox/templates/native/';
         $this->view = new \System\View\Native();
         $this->view->setViewPath($this->viewPath);
-        //$this->tmpPath = dirname(__FILE__) . '../sandbox/tmp/';
     }
 
     public function testFetch1()
@@ -30,7 +29,7 @@ class NativeViewTest extends \PHPUnit_Framework_TestCase
     
     public function testFetch2()
     {
-        $params = new stdClass();
+        $params = new \stdClass();
         $params->lnk = 'http://a.com';
         $params->text = 'a.com';
         

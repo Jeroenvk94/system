@@ -44,7 +44,7 @@ class SmartyViewTest extends \PHPUnit_Framework_TestCase
 
     public function testFetch2()
     {
-        $params = new stdClass();
+        $params = new \stdClass();
         $params->lnk = 'http://a.com';
         $params->text = 'a.com';
 

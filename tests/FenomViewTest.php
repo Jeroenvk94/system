@@ -18,8 +18,8 @@ class FenomViewTest extends \PHPUnit_Framework_TestCase
         $this->viewPath = dirname(__FILE__) . '/../sandbox/templates/fenom/';
         $this->compilePath = dirname(__FILE__) . '/../sandbox/tmp/';
         
-        $fenom = Fenom::factory($this->viewPath, $this->compilePath);
-        $fenom->setOptions(Fenom::FORCE_COMPILE);
+        $fenom = \Fenom::factory($this->viewPath, $this->compilePath);
+        $fenom->setOptions(\Fenom::FORCE_COMPILE);
         
         $this->view = new \System\View\Fenom($fenom);
     }
@@ -35,7 +35,7 @@ class FenomViewTest extends \PHPUnit_Framework_TestCase
 
     public function testFetch2()
     {
-        $params = new stdClass();
+        $params = new \stdClass();
         $params->lnk = 'http://a.com';
         $params->text = 'a.com';
 
