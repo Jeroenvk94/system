@@ -27,8 +27,8 @@ test:
             - "sandbox"
     php_cpd:
         allow_failures: true
-    php_parallel_lint:
+    lint:
         directories:
-            - "src"
+            - "src/"
     php_loc:
     pdepend:
