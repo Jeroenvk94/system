@@ -1,33 +1,37 @@
 <?php
+
 namespace System;
 
 class Auth
 {
 
     private $authKey = null;
+    private $sessionHandler = null;
 
-    public function __construct($name)
+    public function __construct(\System\Session $sessionHandler, $name = 'auth')
     {
+        $this->sessionHandler = $sessionHandler;
         $this->authKey = $name;
     }
 
     public function hasIdentity()
     {
-        return isset($_SESSION[$this->authKey]);
+        return isset($this->sessionHandler[$this->authKey]);
     }
 
     public function setIdentity($data)
     {
-        $_SESSION[$this->authKey] = $data;
+        $this->sessionHandler[$this->authKey] = $data;
     }
 
     public function getIdentity()
     {
-        return $_SESSION[$this->authKey];
+        return $this->sessionHandler[$this->authKey];
     }
 
     public function clearIdentity()
     {
-        unset($_SESSION[$this->authKey]);
+        unset($this->sessionHandler[$this->authKey]);
     }
+
 }
