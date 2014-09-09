@@ -42,6 +42,8 @@ class Session implements \ArrayAccess
 
     private function start()
     {
+        session_name($this->name);
+        
         if (isset($this->saveHandler)) {
             session_set_save_handler($this->saveHandler);
         }
