@@ -20,6 +20,7 @@ class Session
     private static $rememberMeTime = 1209600; // 2 weeks
     private static $started = false;
     private static $name = 'PHPSESSID';
+    
 
     public static function setConfig($config)
     {
@@ -29,6 +30,10 @@ class Session
 
         if (isset($config['name'])) {
             self::$name = $config['name'];
+        }
+        
+        if (isset($config['rememberMeTime'])) {
+            self::setRememberMeTime($config['rememberMeTime']);
         }
     }
 
@@ -67,6 +72,10 @@ class Session
         }
 
         session_set_cookie_params(self::$cookieParams['lifetime'], self::$cookieParams['path'], self::$cookieParams['domain'], self::$cookieParams['secure'], self::$cookieParams['httpOnly']);
+    }
+    
+    public static function setRememberMeTime($time = 0) {
+        self::$rememberMeTime = $time;
     }
 
     public static function getName()
