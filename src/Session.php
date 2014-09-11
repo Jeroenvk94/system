@@ -46,7 +46,7 @@ class Session
                 throw new Session\SessionStartException("Error during session initialization");
             }
 
-            $this->started = true;
+            self::$started = true;
         }
     }
 
@@ -63,7 +63,7 @@ class Session
     public static function setCookieParams($params = null)
     {
         if (!empty($params)) {
-            self::$cookieParams = array_merge(self::cookieParams, $params);
+            self::$cookieParams = array_merge(self::$cookieParams, $params);
         }
 
         session_set_cookie_params(self::$cookieParams['lifetime'], self::$cookieParams['path'], self::$cookieParams['domain'], self::$cookieParams['secure'], self::$cookieParams['httpOnly']);
@@ -80,7 +80,7 @@ class Session
             self::$name = $name;
         }
 
-        session_name(self::name);
+        session_name(self::$name);
     }
 
     public static function getId()
@@ -127,7 +127,7 @@ class Session
 
     public static function isStarted()
     {
-        return self::started;
+        return self::$started;
     }
 
 }
