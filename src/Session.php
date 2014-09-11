@@ -74,7 +74,7 @@ class Session
         return session_name();
     }
 
-    public static function setName(string $name = '')
+    public static function setName($name = '')
     {
         if (!empty($name)) {
             self::$name = $name;
@@ -102,7 +102,7 @@ class Session
         }
     }
 
-    public static function rememberMe(int $seconds = 0)
+    public static function rememberMe($seconds = 0)
     {
         if ($seconds == 0) {
             $seconds = self::$rememberMeTime;
