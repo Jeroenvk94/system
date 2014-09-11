@@ -50,8 +50,9 @@ class Session
         }
     }
 
-    public static function setMaxLifeTime(int $time = 0)
+    public static function setMaxLifeTime($time = 0)
     {
+        $time = (int) $time;
         if ($time < static::$rememberMeTime) {
             $time = static::$rememberMeTime;
         }
