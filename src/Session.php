@@ -7,111 +7,126 @@ namespace System;
  *
  * @author Rastor
  */
-class Session implements \ArrayAccess
+class Session
 {
 
-    private $cookieParams = array(
+    private static $cookieParams = array(
         'lifetime' => 0,
         'path' => null,
         'domain' => null,
         'secure' => false,
         'httpOnly' => false
     );
-    private $saveHandler = null;
-    private $started = false;
-    private $name = 'PHPSESSID';
+    private static $rememberMeTime = 1209600; // 2 weeks
+    private static $started = false;
+    private static $name = 'PHPSESSID';
 
-    public function __construct($config)
+    public static function setConfig($config)
     {
-        if (session_status() === PHP_SESSION_DISABLED) {
-            throw new Session\SessionDisabledException("Sessions is currently disabled on your system");
-        }
-
-        if (isset($config['saveHandler'])) {
-            $this->saveHandler = $config['saveHandler'];
+        if (isset($config['cookieParams'])) {
+            self::setCookieParams($config['cookieParams']);
         }
 
         if (isset($config['name'])) {
-            $this->name = $config['name'];
-        }
-
-        if (isset($config['cookieParams'])) {
-            $this->setCookieParams($config['cookieParams']);
+            self::$name = $config['name'];
         }
     }
 
-    private function start()
+    public static function start()
     {
-        session_name($this->name);
-        
-        if (isset($this->saveHandler)) {
-            session_set_save_handler($this->saveHandler);
-        }
+        if (!self::$started) {
+            if (session_status() === PHP_SESSION_DISABLED) {
+                throw new Session\SessionDisabledException("Sessions is currently disabled on your system");
+            }
 
-        if (!session_start()) {
-            throw new Session\SessionStartException("Error during session initialization");
-        }
+            self::setName();
+            self::setMaxLifeTime();
 
-        $this->started = true;
+            if (!session_start()) {
+                throw new Session\SessionStartException("Error during session initialization");
+            }
+
+            $this->started = true;
+        }
     }
 
-    public function setCookieParams($params = null)
+    public static function setMaxLifeTime(int $time = 0)
+    {
+        if ($time < static::$rememberMeTime) {
+            $time = static::$rememberMeTime;
+        }
+
+        ini_set('session.gc_maxlifetime', $time);
+    }
+
+    public static function setCookieParams($params = null)
     {
         if (!empty($params)) {
-            $this->cookieParams = array_merge($this->cookieParams, $params);
+            self::$cookieParams = array_merge(self::cookieParams, $params);
         }
-        
-        session_set_cookie_params($this->cookieParams['lifetime'], $this->cookieParams['path'], $this->cookieParams['domain'], $this->cookieParams['secure'], $this->cookieParams['httpOnly']);
+
+        session_set_cookie_params(self::$cookieParams['lifetime'], self::$cookieParams['path'], self::$cookieParams['domain'], self::$cookieParams['secure'], self::$cookieParams['httpOnly']);
     }
 
-    public function restart()
+    public static function getName()
+    {
+        return session_name();
+    }
+
+    public static function setName(string $name = '')
+    {
+        if (!empty($name)) {
+            self::$name = $name;
+        }
+
+        session_name(self::name);
+    }
+
+    public static function getId()
+    {
+        return session_id();
+    }
+
+    public static function restart()
     {
         if (!session_regenerate_id()) {
             throw new Session\SessionRestartException("Error during session reinitialization");
         }
     }
 
-    public function destroy()
+    public static function destroy()
     {
         if (!session_destroy()) {
             throw new Session\SessionDestroyException("Error during session destroy");
         }
     }
 
-    public function offsetSet($offset, $value)
+    public static function rememberMe(int $seconds = 0)
     {
-        if (!$this->started) {
-            $this->start();
+        if ($seconds == 0) {
+            $seconds = self::$rememberMeTime;
         }
 
-        $_SESSION[$offset] = $value;
+        self::setCookieParams(array('lifetime' => $seconds));
+        self::regenerateId();
     }
 
-    public function offsetExists($offset)
+    public static function forgotMe()
     {
-        if (!$this->started) {
-            $this->start();
-        }
-
-        return isset($_SESSION[$offset]);
+        self::setCookieParams(array('lifetime' => 0));
+        self::regenerateId();
     }
 
-    public function offsetUnset($offset)
+    public static function regenerateId($clear = false)
     {
-        if (!$this->started) {
-            $this->start();
+        if (!session_regenerate_id($clear)) {
+            throw new Session\SessionRestartException("Error during session reinitialization");
         }
-
-        unset($_SESSION[$offset]);
     }
 
-    public function offsetGet($offset)
+    public static function isStarted()
     {
-        if (!$this->started) {
-            $this->start();
-        }
-
-        return $_SESSION[$offset];
+        return self::started;
     }
 
 }

@@ -2,6 +2,8 @@
 
 namespace System;
 
+use System\Session;
+
 class FlashMessages
 {
 
@@ -11,7 +13,6 @@ class FlashMessages
     const SUCCESS = 3;
 
     private $sessionKey = '_flashMessages';
-    private $sessionHandler = null;
     private $styles = array(
         self::INFO => array(
             'block' => 'alert alert-info',
@@ -31,31 +32,31 @@ class FlashMessages
         ),
     );
 
-    public function __construct(\System\Session $session)
+    public function __construct()
     {
-        $this->sessionHandler = $session;
+        Session::start();
 
-        if (!isset($this->sessionHandler[$this->sessionKey])) {
+        if (!isset($_SESSION[$this->sessionKey])) {
             $this->clear();
         }
     }
 
     public function clear()
     {
-        $this->sessionHandler[$this->sessionKey] = array();
+        $_SESSION[$this->sessionKey] = array();
     }
 
     public function add($type, $message)
     {
-        array_push($this->sessionHandler[$this->sessionKey], array(
+        $_SESSION[$this->sessionKey][] = array(
             'type' => (int) $type,
             'message' => $message
-        ));
+        );
     }
 
     public function hasData()
     {
-        return count($this->sessionHandler[$this->sessionKey]) > 0;
+        return count($_SESSION[$this->sessionKey]) > 0;
     }
 
     public function setStyles(array $styles)
@@ -66,7 +67,7 @@ class FlashMessages
     public function getData()
     {
         $result = array();
-        foreach ($this->sessionHandler[$this->sessionKey] as $item) {
+        foreach ($_SESSION[$this->sessionKey] as $item) {
             $result[] = array(
                 'message' => $item['message'],
                 'styles' => $this->styles[$item['type']]
