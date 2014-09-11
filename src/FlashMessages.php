@@ -1,73 +1,79 @@
 <?php
+
 namespace System;
 
 class FlashMessages
 {
 
-    const INFO = 1;
-    const WARNING = 2;
-    const ERROR = 3;
-    const SUCCESS = 4;
+    const INFO = 0;
+    const WARNING = 1;
+    const ERROR = 2;
+    const SUCCESS = 3;
 
     private $sessionKey = '_flashMessages';
-    private $classes = array(
-        self::INFO => 'alert alert-info',
-        self::WARNING => 'alert alert-block',
-        self::ERROR => 'alert alert-danger',
-        self::SUCCESS => 'alert alert-success',
-    );
-    private $icons = array(
-        self::INFO => 'fa fa-info-circle sign',
-        self::WARNING => 'fa fa-warning sign',
-        self::ERROR => 'fa fa-times-circle sign',
-        self::SUCCESS => 'fa fa-check sign',
+    private $sessionHandler = null;
+    private $styles = array(
+        self::INFO => array(
+            'block' => 'alert alert-info',
+            'icon' => 'fa fa-info-circle'
+        ),
+        self::WARNING => array(
+            'block' => 'alert alert-block',
+            'icon' => 'fa fa-warning'
+        ),
+        self::ERROR => array(
+            'block' => 'alert alert-danger',
+            'icon' => 'fa fa-times-circle'
+        ),
+        self::SUCCESS => array(
+            'block' => 'alert alert-success',
+            'icon' => 'fa fa-check sign'
+        ),
     );
 
-    public function __construct()
+    public function __construct(\System\Session $session)
     {
-        if (!isset($_SESSION[$this->sessionKey])) {
+        $this->sessionHandler = $session;
+
+        if (!isset($this->sessionHandler[$this->sessionKey])) {
             $this->clear();
         }
     }
 
     public function clear()
     {
-        $_SESSION[$this->sessionKey] = array();
+        $this->sessionHandler[$this->sessionKey] = array();
     }
 
     public function add($type, $message)
     {
-        $_SESSION[$this->sessionKey][] = array(
+        array_push($this->sessionHandler[$this->sessionKey], array(
             'type' => (int) $type,
             'message' => $message
-        );
+        ));
     }
 
-    public function setClasses($array)
+    public function hasData()
     {
-        $this->classes = $array;
+        return count($this->sessionHandler[$this->sessionKey]) > 0;
     }
 
-    public function __toString()
+    public function setStyles(array $styles)
     {
-        $result = '';
-        foreach ($_SESSION[$this->sessionKey] as $item) {
-            $result .= "<div class=\"{$this->classes[$item['type']]}\"><button type=\"button\" "
-                    . "class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>"
-                    . "<i class=\"{$this->icons[$item['type']]}\"></i>{$item['message']}</div>";
-        }
-        $this->clear();
-
-        return $result;
-    }
-
-    public function getViewData()
-    {
-        return (String) $this;
+        $this->styles = $styles;
     }
 
     public function getData()
     {
-        return $_SESSION[$this->sessionKey];
+        $result = array();
+        foreach ($this->sessionHandler[$this->sessionKey] as $item) {
+            $result[] = array(
+                'message' => $item['message'],
+                'styles' => $this->styles[$item['type']]
+            );
+        }
+        $this->clear();
+        return $result;
     }
+
 }
