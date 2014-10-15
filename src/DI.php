@@ -10,9 +10,9 @@ namespace System;
 class DI implements \ArrayAccess
 {
 
-    private static $container = array();
-    private static $shared = array();
-    private static $keys = array();
+    private $container = array();
+    private $shared = array();
+    private $keys = array();
 
     public function offsetSet($offset, $value)
     {
@@ -21,12 +21,12 @@ class DI implements \ArrayAccess
 
     public function offsetExists($offset)
     {
-        return isset(self::$keys[$offset]);
+        return isset($this->keys[$offset]);
     }
 
     public function offsetUnset($offset)
     {
-        unset(self::$keys[$offset], self::$container[$offset], self::$shared[$offset]);
+        unset($this->keys[$offset], $this->container[$offset], $this->shared[$offset]);
     }
 
     public function offsetGet($offset)
@@ -40,8 +40,8 @@ class DI implements \ArrayAccess
             throw new \Exception('Value must be callable!');
         }
 
-        self::$shared[$offset] = $callable;
-        self::$keys[$offset] = true;
+        $this->shared[$offset] = $callable;
+        $this->keys[$offset] = true;
     }
 
     public function set($offset, $value)
@@ -50,24 +50,24 @@ class DI implements \ArrayAccess
             throw new \Exception('Invalid offset!');
         }
 
-        self::$keys[$offset] = true;
-        self::$container[$offset] = $value;
+        $this->keys[$offset] = true;
+        $this->container[$offset] = $value;
     }
 
     public function get($offset)
     {
-        if (isset(self::$keys[$offset])) {
-            if (isset(self::$shared[$offset])) {
-                $constructor = self::$shared[$offset];
-                self::$container[$offset] = $constructor();
-                unset(self::$shared[$offset]);
-                return self::$container[$offset];
-            } elseif (isset(self::$container[$offset])) {
-                return self::$container[$offset];
-            }
+        if (!isset($this->keys[$offset])) {
+            return null;
         }
 
-        return null;
+        if (isset($this->shared[$offset])) {
+            $constructor = $this->shared[$offset];
+            $this->container[$offset] = $constructor();
+            unset($this->shared[$offset]);
+            return $this->container[$offset];
+        }
+
+        return $this->container[$offset];
     }
 
 }

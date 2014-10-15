@@ -31,7 +31,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $this->router->add('first', 'text');
-        } catch (\Exception $e) {
+        } catch (\System\Router\InvalidRouteObjectException $e) {
             return;
         }
 
@@ -131,18 +131,18 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             $self->assertFalse($route);
         });
     }
-
-    public function testException()
+    
+    public function testExecute()
     {
         try {
-            $this->router->execute('first', array());
-        } catch (\Exception $e) {
+        $this->router->execute('someUri', 'someString');
+        } catch (\System\Router\HandlerNotCallableException $e) {
             return;
         }
-
+        
         $this->fail('An expected exception has not been raised.');
     }
-
+    
     public function testMatching1()
     {
         $this->assertTrue($this->routes['first']->isMatch('/first'));

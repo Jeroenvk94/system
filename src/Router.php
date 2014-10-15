@@ -17,7 +17,7 @@ class Router
         }
         
         if (!($route instanceof \System\Route)) {
-            throw new \Exception("Invalid Route object");
+            throw new Router\InvalidRouteObjectException("Invalid Route object");
         }
         
         if ($name === $route) {
@@ -52,7 +52,7 @@ class Router
             }
             return $targetHandler(false, null);
         } else {
-            throw new \Exception('Target Handler must be callable!');
+            throw new Router\HandlerNotCallableException('TargetHandler must be callable!');
         }
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace System\Tests;
 
 /**
@@ -6,155 +7,184 @@ namespace System\Tests;
  *
  * @author Orest
  */
-class RouterTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit_Framework_TestCase
 {
 
-    public $router;
-    public $routes = array();
-    public $baseUrl = 'http://base.url/';
+    protected static $get = array(
+        'a' => 1,
+        'b' => 2
+    );
+    protected static $post = array(
+        'a' => 'value',
+        'b' => array(5)
+    );
+    protected static $cookie = array(
+        'key1' => 'value1',
+        'key2' => 'value2'
+    );
+    protected static $server = array(
+        'REQUEST_METHOD' => 'POST',
+        'HTTPS' => 'on',
+        'HTTP_HOST' => 'localhost',
+        'REQUEST_URI' => '/test.php',
+        'HTTP_X_REQUESTED_WITH' => 'XMLHTTPRequest'
+    );
+    protected static $request;
 
-    protected function setUp()
+    public static function setUpBeforeClass()
     {
-        $this->router = new \System\Router();
-        $this->router->setBaseUrl($this->baseUrl);
-
-        $this->routes['first'] = new \System\Router\Route('/first');
-        $this->routes['second'] = new \System\Router\Regex('/article/:id', null, array('id' => '\d+'));
-        $this->routes['third'] = new \System\Router\Regex('/setKey/:key/:value');
-        $this->routes['noName'] = new \System\Router\Route('/noName');
-
-        $this->router->add('first', $this->routes['first']);
-        $this->router->add('regex', $this->routes['second']);
+        self::$request = new \System\Request(self::$get, self::$post, self::$cookie, self::$server);
     }
 
-    public function testAdd1()
+    public function testGet1()
     {
-        try {
-            $this->router->add('first', 'text');
-        } catch (\Exception $e) {
-            return;
-        }
-
-        $this->fail('An expected exception has not been raised.');
+        $getArray = self::$request->get();
+        $this->assertSame($getArray, self::$get);
     }
 
-    public function testAdd2()
+    public function testGet2()
     {
-        $self = $this;
-        $this->router->add('first', $this->routes['first']);
-        $this->router->execute('/first', function ($route) use ($self) {
-            $self->assertEquals($route, $self->routes['first']);
-        });
+        $getValue = self::$request->get('b');
+        $this->assertSame($getValue, self::$get['b']);
     }
 
-    public function testAdd3()
+    public function testGet3()
     {
-        $self = $this;
-        $this->router->add('second', $this->routes['second']);
-        $this->router->execute('/article/5', function ($route) use ($self) {
-            $self->assertEquals($route, $self->routes['second']);
-        });
+        $getValue = self::$request->get('c');
+        $this->assertNull($getValue);
     }
 
-    public function testAdd4()
+    public function testPost1()
     {
-        $self = $this;
-        $this->router->add('third', $this->routes['third']);
-        $this->router->execute('/setKey/a/5', function ($route) use ($self) {
-            $self->assertEquals($route, $self->routes['third']);
-        });
+        $postArray = self::$request->post();
+        $this->assertSame($postArray, self::$post);
     }
 
-    public function testAdd5()
+    public function testPost2()
     {
-        $self = $this;
-        $this->router->add($this->routes['noName']);
-        $this->router->execute('/noName', function ($route) use ($self) {
-            $self->assertEquals($route, $self->routes['noName']);
-        });
+        $postValue = self::$request->post('b');
+        $this->assertSame($postValue, self::$post['b']);
     }
 
-    public function testToGetRouteParams()
+    public function testPost3()
     {
-        $self = $this;
-        $this->router->add('third', $this->routes['third']);
-        $this->router->execute('/setKey/foo/bar', function ($route) use ($self) {
-            $self->assertEquals($route->getParams(), array(
-                'key' => 'foo',
-                'value' => 'bar'
-            ));
-        });
+        $postValue = self::$request->post('c');
+        $this->assertNull($postValue);
     }
 
-    public function testGetBaseUrl()
+    public function testCookie1()
     {
-        $this->assertEquals($this->baseUrl, $this->router->getBaseUrl());
+        $cookieArray = self::$request->cookie();
+        $this->assertSame($cookieArray, self::$cookie);
     }
 
-    public function testUrlBuilding1()
+    public function testCookie2()
     {
-        $this->assertSame($this->router->getRouteUri('first'), '/first');
+        $cookieValue = self::$request->cookie('key2');
+        $this->assertSame($cookieValue, self::$cookie['key2']);
     }
 
-    public function testUrlBuilding2()
+    public function testCookie3()
     {
-        $this->assertSame($this->router->getRouteUrl('regex', array('id' => 22)), $this->baseUrl . '/article/22');
+        $cookieValue = self::$request->cookie('key3');
+        $this->assertNull($cookieValue);
     }
 
-    public function testUrlBuilding3()
+    public function testServer1()
     {
-        $this->assertFalse($this->router->getRouteUrl('name'));
+        $serverArray = self::$request->server();
+        $this->assertSame($serverArray, self::$server);
     }
 
-    public function testRouterExecSetup()
+    public function testServer2()
     {
-        $self = $this;
-        $this->router->execute('/article/899', function ($route, $name) use ($self) {
-            if ($route !== false) {
-                $self->assertEquals(array(
-                    $self->router->getRouteName(),
-                    $self->router->getFindRoute()
-                        ), array(
-                    $name,
-                    $route
-                ));
-            } else {
-                $this->fail('Route not found');
-            }
-        });
+        $serverValue = self::$request->server('REQUEST_METHOD');
+        $this->assertSame($serverValue, self::$server['REQUEST_METHOD']);
     }
 
-    public function testRouterRouteNotFound()
+    public function testServer3()
     {
-        $self = $this;
-        $this->router->execute('someUri', function ($route) use ($self) {
-            $self->assertFalse($route);
-        });
+        $serverValue = self::$request->server('someKey');
+        $this->assertNull($serverValue);
     }
 
-    public function testException()
+    public function testIsSecure()
     {
-        try {
-            $this->router->execute('first', array());
-        } catch (\Exception $e) {
-            return;
-        }
-
-        $this->fail('An expected exception has not been raised.');
+        $secure = self::$request->isSecure();
+        $this->assertTrue($secure);
     }
 
-    public function testMatching1()
+    public function testUri()
     {
-        $this->assertTrue($this->routes['first']->isMatch('/first'));
+        $uri = self::$request->uri();
+        $this->assertSame($uri, self::$server['REQUEST_URI']);
     }
 
-    public function testMatching2()
+    public function testIsCli()
     {
-        $this->assertTrue($this->routes['second']->isMatch('/article/65'));
+        $client = self::$request->isCli();
+        $this->assertFalse($client);
     }
 
-    public function testMatching3()
+    public function testIsAjax()
     {
-        $this->assertFalse($this->routes['second']->isMatch('/article/a'));
+        $ajax = self::$request->isAjax();
+        $this->assertTrue($ajax);
     }
+
+    public function testIsGet()
+    {
+        $is = self::$request->isGet();
+        $this->assertFalse($is);
+    }
+
+    public function testIsPost()
+    {
+        $is = self::$request->isPost();
+        $this->assertTrue($is);
+    }
+
+    public function testIsPut()
+    {
+        $is = self::$request->isPut();
+        $this->assertFalse($is);
+    }
+
+    public function testIsDelete()
+    {
+        $is = self::$request->isDelete();
+        $this->assertFalse($is);
+    }
+
+    public function testIsHead()
+    {
+        $is = self::$request->isHead();
+        $this->assertFalse($is);
+    }
+
+    public function testIsOptions()
+    {
+        $is = self::$request->isOptions();
+        $this->assertFalse($is);
+    }
+
+    public function testScheme()
+    {
+        $scheme = self::$request->scheme();
+        $this->assertSame('https', $scheme);
+    }
+
+    public function testIsMobile()
+    {
+        $is = self::$request->isMobile();
+        $this->assertFalse($is);
+    }
+
+    public function testMethod()
+    {
+        $request = new \System\Request(array('_method' => 'DELETE'), self::$post, self::$cookie, self::$server);
+        $isDelete = $request->isDelete();
+        $this->assertTrue($isDelete);
+    }
+
 }
