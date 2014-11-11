@@ -2,7 +2,7 @@
 
 namespace System\Router;
 
-class Regex implements \System\Route
+class Regex implements \System\RouteInterface
 {
 
     public $params = array();

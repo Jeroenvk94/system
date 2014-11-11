@@ -7,32 +7,52 @@ use System\Session;
 class Auth
 {
 
+    /**
+     *
+     * @var DI
+     */
+    private $di;
     private $authKey = null;
+    private $session = null;
 
-    public function __construct($name = 'auth')
+    public function __construct(DI $di, $name = 'auth')
     {
-        Session::start();
+        $this->di = $di;
         $this->authKey = $name;
+        $this->session = $this->di->get('session');
+
+        if (!($this->session instanceof Session)) {
+            throw new DI\InvalidOffsetException("Session object not defined!");
+        }
+    }
+
+    /**
+     * 
+     * @return DI
+     */
+    public function getDI()
+    {
+        return $this->di;
     }
 
     public function hasIdentity()
     {
-        return isset($_SESSION[$this->authKey]);
+        return isset($this->session[$this->authKey]);
     }
 
     public function setIdentity($data)
     {
-        $_SESSION[$this->authKey] = $data;
+        $this->session[$this->authKey] = $data;
     }
 
     public function getIdentity()
     {
-        return $_SESSION[$this->authKey];
+        return $this->session[$this->authKey];
     }
 
     public function clearIdentity()
     {
-        unset($_SESSION[$this->authKey]);
+        unset($this->session[$this->authKey]);
     }
 
 }

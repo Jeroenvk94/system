@@ -7,7 +7,7 @@ namespace System\View;
  *
  * @author Orest
  */
-class Smarty implements \System\View
+class Smarty implements \System\ViewInterface
 {
     protected $smarty;
 

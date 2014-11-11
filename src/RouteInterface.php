@@ -5,7 +5,7 @@ namespace System;
  *
  * @author Orest
  */
-interface Route
+interface RouteInterface
 {
 
     public function __construct($pattern, $target);

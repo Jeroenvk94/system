@@ -7,7 +7,7 @@ namespace System;
  *
  * @author Rastor
  */
-class Session
+class Session implements \ArrayAccess
 {
 
     private static $cookieParams = array(
@@ -20,7 +20,7 @@ class Session
     private static $rememberMeTime = 1209600; // 2 weeks
     private static $started = false;
     private static $name = 'PHPSESSID';
-    
+    public static $isUnitTesting = false;
 
     public static function setConfig($config)
     {
@@ -31,7 +31,7 @@ class Session
         if (isset($config['name'])) {
             self::$name = $config['name'];
         }
-        
+
         if (isset($config['rememberMeTime'])) {
             self::setRememberMeTime($config['rememberMeTime']);
         }
@@ -47,7 +47,7 @@ class Session
             self::setName();
             self::setMaxLifeTime();
 
-            if (!session_start()) {
+            if (!self::$isUnitTesting && !session_start()) {
                 throw new Session\SessionStartException("Error during session initialization");
             }
 
@@ -55,14 +55,13 @@ class Session
         }
     }
 
-    public static function setMaxLifeTime($time = 0)
+    public static function setMaxLifeTime(int $time = 0)
     {
-        $time = (int) $time;
         if ($time < static::$rememberMeTime) {
             $time = static::$rememberMeTime;
         }
 
-        ini_set('session.gc_maxlifetime', $time);
+        return ini_set('session.gc_maxlifetime', $time);
     }
 
     public static function setCookieParams($params = null)
@@ -71,10 +70,16 @@ class Session
             self::$cookieParams = array_merge(self::$cookieParams, $params);
         }
 
-        session_set_cookie_params(self::$cookieParams['lifetime'], self::$cookieParams['path'], self::$cookieParams['domain'], self::$cookieParams['secure'], self::$cookieParams['httpOnly']);
+        session_set_cookie_params(
+                self::$cookieParams['lifetime'],
+                self::$cookieParams['path'],
+                self::$cookieParams['domain'],
+                self::$cookieParams['secure'],
+                self::$cookieParams['httpOnly']);
     }
-    
-    public static function setRememberMeTime($time = 0) {
+
+    public static function setRememberMeTime($time = 0)
+    {
         self::$rememberMeTime = $time;
     }
 
@@ -137,6 +142,42 @@ class Session
     public static function isStarted()
     {
         return self::$started;
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        if (!self::$started) {
+            self::start();
+        }
+
+        $_SESSION[$offset] = $value;
+    }
+
+    public function offsetExists($offset)
+    {
+        if (!self::$started) {
+            self::start();
+        }
+
+        return isset($_SESSION[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        if (!self::$started) {
+            self::start();
+        }
+
+        return isset($_SESSION[$offset]) ? $_SESSION[$offset] : null;
+    }
+
+    public function offsetUnset($offset)
+    {
+        if (!self::$started) {
+            self::start();
+        }
+
+        unset($_SESSION[$offset]);
     }
 
 }

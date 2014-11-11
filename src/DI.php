@@ -34,20 +34,16 @@ class DI implements \ArrayAccess
         return $this->get($offset);
     }
 
-    public function setShared($offset, $callable)
+    public function setShared($offset, callable $callable)
     {
-        if (!is_callable($callable)) {
-            throw new \Exception('Value must be callable!');
-        }
-
         $this->shared[$offset] = $callable;
         $this->keys[$offset] = true;
     }
 
     public function set($offset, $value)
     {
-        if (is_null($offset)) {
-            throw new \Exception('Invalid offset!');
+        if (!strlen($offset)) {
+            throw new \DI\InvalidOffsetException('Invalid offset!');
         }
 
         $this->keys[$offset] = true;
@@ -68,6 +64,16 @@ class DI implements \ArrayAccess
         }
 
         return $this->container[$offset];
+    }
+
+    public function exist($offset)
+    {
+        return $this->offsetExists($offset);
+    }
+
+    public function delete($offset)
+    {
+        $this->offsetUnset($offset);
     }
 
 }

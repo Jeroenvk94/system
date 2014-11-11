@@ -17,7 +17,7 @@ class Request
     private $files = [];
     private $method = null;
 
-    public function __construct($get, $post, $cookie, $server, $files = array())
+    public function __construct($get = array(), $post = array(), $cookie = array(), $server = array(), $files = array())
     {
         $this->get = $get;
         $this->post = $post;
@@ -149,6 +149,12 @@ class Request
         return ($this->isCli() ? 'cli' : ($this->isSecure() ? 'https' : 'http' ));
     }
 
+    /**
+     * Detect mobile device by user agent string
+     * Regex updated: 1 August 2014 - http://detectmobilebrowsers.com/
+     * 
+     * @return type
+     */
     public function isMobile()
     {
         $userAgent = $this->server('HTTP_USER_AGENT');

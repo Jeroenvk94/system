@@ -7,7 +7,7 @@ namespace System\View;
  *
  * @author Orest
  */
-class Native implements \System\View
+class Native implements \System\ViewInterface
 {
 
     private $viewPath = '';

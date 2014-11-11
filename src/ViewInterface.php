@@ -1,4 +1,5 @@
 <?php
+
 namespace System;
 
 /**
@@ -6,7 +7,7 @@ namespace System;
  * 
  * @author Rastor
  */
-interface View
+interface ViewInterface
 {
 
     public function fetch($template, $vars = array());

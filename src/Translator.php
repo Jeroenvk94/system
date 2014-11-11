@@ -50,18 +50,30 @@ class Translator
         return $string;
     }
 
+    /**
+     * Get Request object
+     * 
+     * @return Request
+     * @throws DI\InvalidOffset
+     */
+    public function getRequest()
+    {
+        $request = $this->di->get('request');
+        
+        if (!($request instanceof Request)) {
+            throw new DI\InvalidOffsetException("Request object not defined!");
+        }
+        
+        return $request;
+    }
+
     public function getUserLocales()
     {
         if ($this->userLocales !== null) {
             return $this->userLocales;
         }
-
-        $request = $this->di->get('request');
-        if (!($request instanceof Request)) {
-            throw new Translator\InvalidDIRequestValueException("Request offset of DI must be an instace of System\Request");
-        }
-
-        if (($acceptLanguage = $request->server('HTTP_ACCEPT_LANGUAGE')) !== null && strlen($acceptLanguage)) {
+        
+        if (($acceptLanguage = $this->getRequest()->server('HTTP_ACCEPT_LANGUAGE')) !== null && strlen($acceptLanguage)) {
             $this->userLocales = $this->parseServerAcceptLanguage($acceptLanguage);
         } else {
             $this->userLocales = array();

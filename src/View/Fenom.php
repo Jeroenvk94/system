@@ -8,7 +8,7 @@ namespace System\View;
  *
  * @author Orest
  */
-class Fenom implements \System\View
+class Fenom implements \System\ViewInterface
 {
     protected $fenom;
 

@@ -1,5 +1,8 @@
 <?php
+
 namespace System;
+
+use PDO;
 
 abstract class Model
 {
@@ -8,7 +11,7 @@ abstract class Model
      *
      * @var DI
      */
-    public $di;
+    protected $di;
 
     public function __construct($di)
     {
@@ -17,10 +20,10 @@ abstract class Model
 
     /**
      * 
-     * @return \PDO
+     * @return PDO
      */
     public function getDb()
     {
-        return $this->di['db'];
+        return $this->di->get('db');
     }
 }

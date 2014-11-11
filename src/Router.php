@@ -16,7 +16,7 @@ class Router
             $route = $name;
         }
         
-        if (!($route instanceof \System\Route)) {
+        if (!($route instanceof \System\RouteInterface)) {
             throw new Router\InvalidRouteObjectException("Invalid Route object");
         }
         

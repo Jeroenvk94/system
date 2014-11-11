@@ -1,7 +1,7 @@
 <?php
 namespace System\Router;
 
-class Route implements \System\Route
+class Route implements \System\RouteInterface
 {
 
     public $pattern;

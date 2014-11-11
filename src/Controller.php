@@ -42,8 +42,8 @@ abstract class Controller
         if ($this->viewTemplate !== false) {
             $view = $this->di->get('view');
 
-            if (!($view instanceof \System\View)) {
-                throw new \Exception('DI View must be an instance of System\View');
+            if (!($view instanceof ViewInterface)) {
+                throw new DI\InvalidOffsetException('DI View must be an instance of System\View');
             }
 
             $this->view->di = $this->di;
@@ -75,7 +75,7 @@ abstract class Controller
     public function makeJSONResponse($data)
     {
         header('Content-Type: application/javascript');
-        echo @json_encode($data);
+        echo json_encode($data);
         die;
     }
 
@@ -104,15 +104,21 @@ abstract class Controller
         $this->params = $params;
     }
 
-    public function isPost()
+    /**
+     * Get Request object
+     * 
+     * @return Request
+     * @throws DI\InvalidOffset
+     */
+    public function getRequest()
     {
-        return $_SERVER['REQUEST_METHOD'] === 'POST';
-    }
+        $request = $this->di->get('request');
 
-    public function isAjaxRequest()
-    {
-        return !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
-                && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+        if (!($request instanceof Request)) {
+            throw new DI\InvalidOffsetException("Request object not defined!");
+        }
+
+        return $request;
     }
 
     public function redirect($url, $statusCode = 302)
@@ -120,4 +126,5 @@ abstract class Controller
         header('Location: ' . $url, true, $statusCode);
         die;
     }
+
 }
