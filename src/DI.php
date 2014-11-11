@@ -76,4 +76,40 @@ class DI implements \ArrayAccess
         $this->offsetUnset($offset);
     }
 
+    /**
+     * 
+     * @return System\Session
+     */
+    public function getSession()
+    {
+        return $this->get('session');
+    }
+    
+    /**
+     * 
+     * @return System\Router
+     */
+    public function getRouter()
+    {
+        return $this->get('router');
+    }
+    
+    /**
+     * 
+     * @return System\Translator
+     */
+    public function getTranslator()
+    {
+        return $this->get('t');
+    }
+    
+    /**
+     * 
+     * @return System\Request
+     */
+    public function getRequest()
+    {
+        return $this->get('request');
+    }
+
 }
