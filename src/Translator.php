@@ -8,18 +8,22 @@ class Translator
     protected $di;
     protected $translations = array();
     protected $allowedLocales = array('en-US');
-    protected $bestLocale;
+    protected $locale;
     protected $userLocales;
 
     /**
      * 
      * @param \System\DI $di
-     * @param array $translations
+     * @param array $allowedLoacales
      */
-    public function __construct(DI $di, array $translations, array $allowedLoacales = array('en-US'))
+    public function __construct(DI $di, array $allowedLoacales = array('en-US'))
     {
         $this->di = $di;
         $this->allowedLocales = $allowedLoacales;
+    }
+
+    public function setTranslations(array $translations)
+    {
         $this->translations = $translations;
     }
 
@@ -59,11 +63,11 @@ class Translator
     public function getRequest()
     {
         $request = $this->di->get('request');
-        
+
         if (!($request instanceof Request)) {
             throw new DI\InvalidOffsetException("Request object not defined!");
         }
-        
+
         return $request;
     }
 
@@ -72,7 +76,7 @@ class Translator
         if ($this->userLocales !== null) {
             return $this->userLocales;
         }
-        
+
         if (($acceptLanguage = $this->getRequest()->server('HTTP_ACCEPT_LANGUAGE')) !== null && strlen($acceptLanguage)) {
             $this->userLocales = $this->parseServerAcceptLanguage($acceptLanguage);
         } else {
@@ -141,6 +145,11 @@ class Translator
         }
 
         return $this->bestLocale;
+    }
+
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
     }
 
 }
