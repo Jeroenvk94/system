@@ -116,12 +116,8 @@ class Translator
         return false;
     }
 
-    public function getBestLocale()
+    public function setBestLocale()
     {
-        if ($this->bestLocale !== null) {
-            return $this->bestLocale;
-        }
-
         if (count($this->allowedLocales) == 0) {
             throw new Translator\AllowedLocalesEmptyException("AllowedLocales array can`t be empty!");
         }
@@ -130,21 +126,24 @@ class Translator
 
         foreach ($userLocales as $userLocale) {
             if (in_array($userLocale, $this->allowedLocales)) {
-                $this->bestLocale = $userLocale;
+                $this->locale = $userLocale;
                 break;
             }
 
             if (($locale = self::getAllowedLocale($userLocale, $this->allowedLocales)) !== false) {
-                $this->bestLocale = $locale;
+                $this->locale = $locale;
                 break;
             }
         }
 
-        if (empty($this->bestLocale)) {
-            $this->bestLocale = $this->allowedLocales[0];
+        if (empty($this->locale)) {
+            $this->locale = $this->allowedLocales[0];
         }
+    }
 
-        return $this->bestLocale;
+    public function getLocale()
+    {
+        return $this->locale;
     }
 
     public function setLocale($locale)
