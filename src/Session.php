@@ -55,7 +55,7 @@ class Session implements \ArrayAccess
         }
     }
 
-    public static function setMaxLifeTime(int $time = 0)
+    public static function setMaxLifeTime($time = 0)
     {
         if ($time < static::$rememberMeTime) {
             $time = static::$rememberMeTime;
