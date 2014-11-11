@@ -78,6 +78,54 @@ class Request
         return $this->server[$key];
     }
 
+    public function hasGet()
+    {
+        $keys = func_get_args();
+        foreach ($keys as $key) {
+            if (!isset($this->get[$key])) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    public function hasPost()
+    {
+        $keys = func_get_args();
+        foreach ($keys as $key) {
+            if (!isset($this->post[$key])) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+    public function hasCookie()
+    {
+        $keys = func_get_args();
+        foreach ($keys as $key) {
+            if (!isset($this->cookie[$key])) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    public function hasServer()
+    {
+        $keys = func_get_args();
+        foreach ($keys as $key) {
+            if (!isset($this->server[$key])) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     public function method()
     {
         if ($this->method === null) {
