@@ -2,7 +2,7 @@
 
 namespace System;
 
-use Session;
+use System\Session;
 
 class FlashMessages
 {
