@@ -1,4 +1,5 @@
 <?php
+
 namespace System\Tests;
 
 /**
@@ -27,7 +28,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->router->add('regex', $this->routes['second']);
     }
 
-    public function testAdd1()
+    public function testAddError()
     {
         try {
             $this->router->add('first', 'text');
@@ -38,43 +39,31 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->fail('An expected exception has not been raised.');
     }
 
-    public function testAdd2()
+    public function testAdd()
     {
         $self = $this;
         $this->router->add('first', $this->routes['first']);
         $this->router->execute('/first', function ($route) use ($self) {
             $self->assertEquals($route, $self->routes['first']);
         });
-    }
 
-    public function testAdd3()
-    {
-        $self = $this;
         $this->router->add('second', $this->routes['second']);
         $this->router->execute('/article/5', function ($route) use ($self) {
             $self->assertEquals($route, $self->routes['second']);
         });
-    }
 
-    public function testAdd4()
-    {
-        $self = $this;
         $this->router->add('third', $this->routes['third']);
         $this->router->execute('/setKey/a/5', function ($route) use ($self) {
             $self->assertEquals($route, $self->routes['third']);
         });
-    }
 
-    public function testAdd5()
-    {
-        $self = $this;
         $this->router->add($this->routes['noName']);
         $this->router->execute('/noName', function ($route) use ($self) {
             $self->assertEquals($route, $self->routes['noName']);
         });
     }
 
-    public function testToGetRouteParams()
+    public function testGetRouteParams()
     {
         $self = $this;
         $this->router->add('third', $this->routes['third']);
@@ -91,18 +80,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->baseUrl, $this->router->getBaseUrl());
     }
 
-    public function testUrlBuilding1()
+    public function testUrlBuilding()
     {
         $this->assertSame($this->router->getRouteUri('first'), '/first');
-    }
-
-    public function testUrlBuilding2()
-    {
         $this->assertSame($this->router->getRouteUrl('regex', array('id' => 22)), $this->baseUrl . '/article/22');
-    }
-
-    public function testUrlBuilding3()
-    {
         $this->assertFalse($this->router->getRouteUrl('name'));
     }
 
@@ -131,30 +112,23 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             $self->assertFalse($route);
         });
     }
-    
-    public function testExecute()
+
+    public function testExecuteError()
     {
         try {
-        $this->router->execute('someUri', 'someString');
+            $this->router->execute('someUri', 'someString');
         } catch (\System\Router\HandlerNotCallableException $e) {
             return;
         }
-        
+
         $this->fail('An expected exception has not been raised.');
     }
-    
-    public function testMatching1()
+
+    public function testMatching()
     {
         $this->assertTrue($this->routes['first']->isMatch('/first'));
-    }
-
-    public function testMatching2()
-    {
         $this->assertTrue($this->routes['second']->isMatch('/article/65'));
-    }
-
-    public function testMatching3()
-    {
         $this->assertFalse($this->routes['second']->isMatch('/article/a'));
     }
+
 }

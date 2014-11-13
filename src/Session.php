@@ -75,7 +75,8 @@ class Session implements \ArrayAccess
                 self::$cookieParams['path'],
                 self::$cookieParams['domain'],
                 self::$cookieParams['secure'],
-                self::$cookieParams['httpOnly']);
+                self::$cookieParams['httpOnly']
+        );
     }
 
     public static function setRememberMeTime($time = 0)
@@ -100,13 +101,6 @@ class Session implements \ArrayAccess
     public static function getId()
     {
         return session_id();
-    }
-
-    public static function restart()
-    {
-        if (!session_regenerate_id()) {
-            throw new Session\SessionRestartException("Error during session reinitialization");
-        }
     }
 
     public static function destroy()
@@ -134,7 +128,7 @@ class Session implements \ArrayAccess
 
     public static function regenerateId($clear = false)
     {
-        if (!session_regenerate_id($clear)) {
+        if (!self::$isUnitTesting && !session_regenerate_id($clear)) {
             throw new Session\SessionRestartException("Error during session reinitialization");
         }
     }

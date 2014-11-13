@@ -5,6 +5,10 @@ namespace System;
 class Translator
 {
 
+    /**
+     *
+     * @var DI
+     */
     protected $di;
     protected $translations = array();
     protected $allowedLocales = array('en-US');
@@ -54,30 +58,13 @@ class Translator
         return $string;
     }
 
-    /**
-     * Get Request object
-     * 
-     * @return Request
-     * @throws DI\InvalidOffset
-     */
-    public function getRequest()
-    {
-        $request = $this->di->get('request');
-
-        if (!($request instanceof Request)) {
-            throw new DI\InvalidOffsetException("Request object not defined!");
-        }
-
-        return $request;
-    }
-
     public function getUserLocales()
     {
         if ($this->userLocales !== null) {
             return $this->userLocales;
         }
-
-        if (($acceptLanguage = $this->getRequest()->server('HTTP_ACCEPT_LANGUAGE')) !== null && strlen($acceptLanguage)) {
+        
+        if (($acceptLanguage = $this->di->getRequest()->server('HTTP_ACCEPT_LANGUAGE')) !== null && strlen($acceptLanguage)) {
             $this->userLocales = $this->parseServerAcceptLanguage($acceptLanguage);
         } else {
             $this->userLocales = array();

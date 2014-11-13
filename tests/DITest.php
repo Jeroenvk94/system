@@ -1,4 +1,5 @@
 <?php
+
 namespace System\Tests;
 
 /**
@@ -16,83 +17,52 @@ class DITest extends \PHPUnit_Framework_TestCase
         $this->di = new \System\DI();
     }
 
-    public function testSimpleSetGet()
+    public function testSet()
     {
         $this->di->set('key', 'value');
-        $this->assertSame($this->di->get('key'), 'value');
-    }
+        $this->assertSame('value', $this->di->get('key'));
+        $this->assertSame('value', $this->di['key']);
+        $this->assertTrue($this->di->exist('key'));
 
-    public function testSet1()
-    {
-        $this->di->set('key', 'value');
-        $this->assertTrue(isset($this->di['key']));
-    }
-    
-    public function testSet2()
-    {
-        $this->di->set('key1', 'value1');
-        $this->assertFalse(isset($this->di['key2']));
-    }
-    
-    public function testSet3()
-    {
+        $this->di->delete('key');
+        $this->assertNull($this->di->get('key'));
+
+        $this->di['key'] = 'value';
+        $this->assertSame('value', $this->di->get('key'));
+        $this->assertSame('value', $this->di['key']);
+        $this->assertTrue($this->di->exist('key'));
+
+        $this->di->setShared('shared', function() {
+            return 25;
+        });
+        $this->assertSame(25, $this->di->get('shared'));
+        $this->assertSame(25, $this->di['shared']);
+        $this->assertTrue($this->di->exist('shared'));
+
         try {
             $this->di->set(null, 'value');
-        } catch (\Exception $e) {
-            return;
-        }
-
-        $this->fail('An expected exception has not been raised.');
-    }
-    
-    public function testGet()
-    {
-        $value = $this->di->get('someKey');
-        $this->assertNull($value);
-    }
-    
-    public function testUnset()
-    {
-        $this->di->set('key2', 'value2');
-        unset($this->di['key2']);
-        $this->assertFalse(isset($this->di['key2']));
-    }
-
-    public function testSimpleArraySetGet()
-    {
-        $this->di['key'] = 'value';
-        $this->assertSame($this->di['key'], 'value');
-    }
-
-    public function testShared1()
-    {
-        $this->di->setShared('key2', function () {
-            return 'value2';
-        });
-        $this->assertSame($this->di['key2'], 'value2');
-    }
-    
-    public function testShared2()
-    {
-        try {
-            $this->di->setShared('key2', null);
-        } catch (\Exception $e) {
+        } catch (\System\DI\InvalidOffsetException $e) {
             return;
         }
 
         $this->fail('An expected exception has not been raised.');
     }
 
-    public function testRewriteShared()
+    public function testHelpMethods()
     {
-        $this->di->setShared('key3', function () {
-            return 'value';
-        });
-        $this->di['key3'];
-        $this->di->setShared('key3', function () {
-            return 'value2';
-        });
+        $this->di->set('session', 1);
+        $this->di->set('router', 2);
+        $this->di->set('t', 3);
+        $this->di->set('request', 4);
+        $this->di->set('auth', 5);
+        $this->di->set('flashMessages', 6);
 
-        $this->assertSame($this->di['key3'], 'value2');
+        $this->assertSame(1, $this->di->getSession());
+        $this->assertSame(2, $this->di->getRouter());
+        $this->assertSame(3, $this->di->getTranslator());
+        $this->assertSame(4, $this->di->getRequest());
+        $this->assertSame(5, $this->di->getAuth());
+        $this->assertSame(6, $this->di->getFlashMessages());
     }
+
 }

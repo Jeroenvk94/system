@@ -10,7 +10,7 @@ namespace System\Tests;
 class TranslatorTest extends \PHPUnit_Framework_TestCase
 {
 
-    public $translations = array(
+    protected $translations = array(
         1 => 'one',
         'value: %s' => 'VALUE = %s',
         'context' => array(
@@ -23,236 +23,92 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
         ),
         'string %1$s,%2$s' => 'STRING%2$s:%1s',
     );
+    protected $allowedLocales = array('en-US', 'en-UK');
 
-    public function testTranslate1()
-    {
-        $di = new \System\DI();
-        $translator = new \System\Translator($di, $this->translations);
-        
-        $value = $translator->_('string');
-        $this->assertSame($value, 'string');
-    }
+    /**
+     *
+     * @var \System\Translator
+     */
+    protected $translator;
 
-    public function testTranslate2()
-    {
-        $di = new \System\DI();
-        $translator = new \System\Translator($di, $this->translations);
-        
-        $value = $translator->_(1);
-        $this->assertSame($value, 'one');
-    }
+    /**
+     *
+     * @var \System\DI
+     */
+    protected $di;
 
-    public function testTranslate3()
+    public function setUp()
     {
-        $di = new \System\DI();
-        $translator = new \System\Translator($di, $this->translations);
-        
-        $value = $translator->_('value: %s', array('test'));
-        $this->assertSame($value, 'VALUE = test');
+        $this->di = new \System\DI();
+        $this->di->set('request', new \System\Request(RequestTest::$get, RequestTest::$post, RequestTest::$cookie, RequestTest::$server));
+        $this->translator = new \System\Translator($this->di, $this->allowedLocales);
+        $this->translator->setTranslations($this->translations);
     }
 
-    public function testTranslate4()
+    public function testTranslate()
     {
-        $di = new \System\DI();
-        $translator = new \System\Translator($di, $this->translations);
-        
-        $value = $translator->_('context', null, 2);
-        $this->assertSame($value, 'context2');
+        $this->assertSame('string', $this->translator->_('string'));
+        $this->assertSame('one', $this->translator->_(1));
+        $this->assertSame('VALUE = test', $this->translator->_('value: %s', array('test')));
+        $this->assertSame('context2', $this->translator->_('context', null, 2));
+        $this->assertSame('context1', $this->translator->_('context'));
+        $this->assertSame('context2 test2', $this->translator->_('context %s', array('test'), 2));
+        $this->assertSame('context1 test1', $this->translator->_('context %s', array('test')));
+        $this->assertSame('STRING2:1', $this->translator->_('string %1$s,%2$s', array(1, 2)));
     }
 
-    public function testTranslate5()
+    public function testUserLocales()
     {
-        $di = new \System\DI();
-        $translator = new \System\Translator($di, $this->translations);
-        
-        $value = $translator->_('context');
-        $this->assertSame($value, 'context1');
+        $this->assertEmpty($this->translator->getUserLocales());
+        $this->assertEmpty($this->translator->getUserLocales()); // read from protected variable
+
+        $this->translator = new \System\Translator($this->di, $this->allowedLocales);
+        $this->di->set('request', new \System\Request(null, null, null, ['HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4']));
+        $this->assertSame(['ru-RU', 'ru', 'en-US', 'en'], $this->translator->getUserLocales());
+
+        $this->translator = new \System\Translator($this->di, $this->allowedLocales);
+        $this->di->set('request', new \System\Request(null, null, null, ['HTTP_ACCEPT_LANGUAGE' => '']));
+        $this->assertEmpty($this->translator->getUserLocales());
     }
 
-    public function testTranslate6()
+    public function testBestLocale()
     {
-        $di = new \System\DI();
-        $translator = new \System\Translator($di, $this->translations);
+        $this->translator->setBestLocale();
+        $this->assertSame('en-US', $this->translator->getLocale());
         
-        $value = $translator->_('context %s', array('test'), 2);
-        $this->assertSame($value, 'context2 test2');
-    }
-
-    public function testTranslate7()
-    {
-        $di = new \System\DI();
-        $translator = new \System\Translator($di, $this->translations);
+        $this->translator = new \System\Translator($this->di, ['ru', 'uk-UA']);
+        $this->di->set('request', new \System\Request(null, null, null, ['HTTP_ACCEPT_LANGUAGE' => 'ru,uk-UA;q=0.8,en;q=0.6']));
+        $this->translator->setBestLocale();
+        $this->assertSame('ru', $this->translator->getLocale());
         
-        $value = $translator->_('context %s', array('test'));
-        $this->assertSame($value, 'context1 test1');
-    }
-
-    public function testTranslate8()
-    {
-        $di = new \System\DI();
-        $translator = new \System\Translator($di, $this->translations);
+        $this->translator = new \System\Translator($this->di, ['ru', 'en']);
+        $this->di->set('request', new \System\Request(null, null, null, ['HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru-UA;q=0.8,en;q=0.6']));
+        $this->translator->setBestLocale();
+        $this->assertSame('ru', $this->translator->getLocale());
         
-        $value = $translator->_('string %1$s,%2$s', array(1, 2));
-        $this->assertSame($value, 'STRING2:1');
-    }
-
-    public function testUserLocales1()
-    {
-        $di = new \System\DI();
-        $request = new \System\Request([], [], [], ['HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4']);
-        $di->set('request', $request);
-        $translator = new \System\Translator($di, $this->translations);
+        $this->translator = new \System\Translator($this->di, ['ru-RU', 'en']);
+        $this->di->set('request', new \System\Request(null, null, null, ['HTTP_ACCEPT_LANGUAGE' => 'ru,en;q=0.8']));
+        $this->translator->setBestLocale();
+        $this->assertSame('ru-RU', $this->translator->getLocale());
         
-        $locales = $translator->getUserLocales();
-        $this->assertSame($locales, ['ru-RU', 'ru', 'en-US', 'en']);
-    }
-
-    public function testUserLocales2()
-    {
-        $di = new \System\DI();
-        $request = new \System\Request([], [], [], ['HTTP_ACCEPT_LANGUAGE' => '']);
-        $di->set('request', $request);
-        $translator = new \System\Translator($di, $this->translations);
+        $this->translator = new \System\Translator($this->di, ['en']);
+        $this->di->set('request', new \System\Request(null, null, null, ['HTTP_ACCEPT_LANGUAGE' => 'ru,uk-UA;q=0.8']));
+        $this->translator->setBestLocale();
+        $this->assertSame('en', $this->translator->getLocale());
         
-        $locales = $translator->getUserLocales();
-        $this->assertEmpty($locales);
-    }
-    
-    public function testUserLocales3()
-    {
-        $di = new \System\DI();
-        $request = new \System\Request([], [], [], []);
-        $di->set('request', $request);
-        $translator = new \System\Translator($di, $this->translations);
-        
-        $locales = $translator->getUserLocales();
-        $this->assertEmpty($locales);
-    }
-    
-    public function testUserLocales4()
-    {
-        $di = new \System\DI();
-        $request = new \System\Request([], [], [], ['HTTP_ACCEPT_LANGUAGE' => 'a']);
-        $di->set('request', $request);
-        $translator = new \System\Translator($di, $this->translations);
-        
-        $locales = $translator->getUserLocales();
-        $this->assertSame($locales, array('a'));
-    }
-    
-    public function testUserLocales5()
-    {
-        $di = new \System\DI();
-        $translator = new \System\Translator($di, $this->translations);
-        
+        $this->translator = new \System\Translator($this->di, []);
         try {
-            $translator->getUserLocales();
-        } catch (\System\Translator\InvalidDIRequestValueException $e) {
-            return;
-        }
-
-        $this->fail('An expected exception has not been raised.');
-    }
-    
-    public function testUserLocales6()
-    {
-        $di = new \System\DI();
-        $request = new \System\Request([], [], [], []);
-        $di->set('request', $request);
-        $translator = new \System\Translator($di, $this->translations);
-        
-        $locales1 = $translator->getUserLocales();
-        $locales2 = $translator->getUserLocales();
-        
-        $this->assertSame($locales1, $locales2);
-    }
-
-    public function testBestLocale1()
-    {
-        $di = new \System\DI();
-        $request = new \System\Request([], [], [], ['HTTP_ACCEPT_LANGUAGE' => 'ru,uk-UA;q=0.8,en;q=0.6']);
-        $di->set('request', $request);
-        $translator = new \System\Translator($di, $this->translations, ['ru', 'uk-UA']);
-        
-        $best = $translator->getBestLocale();
-
-        $this->assertSame($best, 'ru');
-    }
-
-    public function testBestLocale2()
-    {
-        $di = new \System\DI();
-        $request = new \System\Request([], [], [], []);
-        $di->set('request', $request);
-        $translator = new \System\Translator($di, $this->translations, ['ru-UA', 'ru']);
-        
-        $best = $translator->getBestLocale();
-
-        $this->assertSame($best, 'ru-UA');
-    }
-
-    public function testBestLocale3()
-    {
-        $di = new \System\DI();
-        $request = new \System\Request([], [], [], ['HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru-UA;q=0.8,en;q=0.6']);
-        $di->set('request', $request);
-        $translator = new \System\Translator($di, $this->translations, ['ru', 'en']);
-        
-        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ru-RU,ru-UA;q=0.8,en;q=0.6';
-        $best = $translator->getBestLocale();
-
-        $this->assertSame($best, 'ru');
-    }
-
-    public function testBestLocale4()
-    {
-        $di = new \System\DI();
-        $request = new \System\Request([], [], [], ['HTTP_ACCEPT_LANGUAGE' => 'ru,en;q=0.8']);
-        $di->set('request', $request);
-        $translator = new \System\Translator($di, $this->translations, ['ru-RU', 'en']);
-        
-        $best = $translator->getBestLocale();
-
-        $this->assertSame($best, 'ru-RU');
-    }
-
-    public function testBestLocale5()
-    {
-        try {
-            $di = new \System\DI();
-            $translator = new \System\Translator($di, $this->translations, []);
-            
-            $translator->getBestLocale();
+            $this->translator->setBestLocale();
         } catch (\System\Translator\AllowedLocalesEmptyException $e) {
             return;
         }
 
         $this->fail('An expected exception has not been raised.');
     }
-    
-    public function testBestLocale6()
-    {
-        $di = new \System\DI();
-        $request = new \System\Request([], [], [], ['HTTP_ACCEPT_LANGUAGE' => 'ru,en;q=0.8']);
-        $di->set('request', $request);
-        $translator = new \System\Translator($di, $this->translations, ['uk-UA', 'en-US']);
-        
-        $best = $translator->getBestLocale();
 
-        $this->assertSame($best, 'en-US');
-    }
-
-    public function testBestLocale7()
-    {
-        $di = new \System\DI();
-        $request = new \System\Request([], [], [], ['HTTP_ACCEPT_LANGUAGE' => 'ru,uk-UA;q=0.8,en;q=0.6']);
-        $di->set('request', $request);
-        $translator = new \System\Translator($di, $this->translations, ['ru', 'uk-UA']);
-        
-        $best1 = $translator->getBestLocale();
-        $best2 = $translator->getBestLocale();
-
-        $this->assertSame($best1, $best2);
+    public function testLocale() {
+        $this->translator->setLocale('ru');
+        $this->assertSame('ru', $this->translator->getLocale());
     }
     
 }

@@ -26,4 +26,13 @@ abstract class Model
     {
         return $this->di->get('db');
     }
+    
+    /**
+     * 
+     * @return DI
+     */
+    public function getDI()
+    {
+        return $this->di;
+    }
 }

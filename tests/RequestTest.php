@@ -10,25 +10,30 @@ namespace System\Tests;
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
 
-    protected static $get = array(
+    public static $get = array(
         'a' => 1,
         'b' => 2
     );
-    protected static $post = array(
+    public static $post = array(
         'a' => 'value',
         'b' => array(5)
     );
-    protected static $cookie = array(
+    public static $cookie = array(
         'key1' => 'value1',
         'key2' => 'value2'
     );
-    protected static $server = array(
+    public static $server = array(
         'REQUEST_METHOD' => 'POST',
         'HTTPS' => 'on',
         'HTTP_HOST' => 'localhost',
         'REQUEST_URI' => '/test.php',
         'HTTP_X_REQUESTED_WITH' => 'XMLHTTPRequest'
     );
+
+    /**
+     *
+     * @var \System\Request 
+     */
     protected static $request;
 
     public static function setUpBeforeClass()
@@ -38,74 +43,30 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testGet1()
     {
-        $getArray = self::$request->get();
-        $this->assertSame($getArray, self::$get);
+        $this->assertSame(self::$get, self::$request->get());
+        $this->assertSame(self::$get['b'], self::$request->get('b'));
+        $this->assertNull(self::$request->get('c'));
     }
 
-    public function testGet2()
+    public function testPost()
     {
-        $getValue = self::$request->get('b');
-        $this->assertSame($getValue, self::$get['b']);
+        $this->assertSame(self::$post, self::$request->post());
+        $this->assertSame(self::$post['b'], self::$request->post('b'));
+        $this->assertNull(self::$request->post('c'));
     }
 
-    public function testGet3()
+    public function testCookie()
     {
-        $getValue = self::$request->get('c');
-        $this->assertNull($getValue);
+        $this->assertSame(self::$cookie, self::$request->cookie());
+        $this->assertSame(self::$cookie['key2'], self::$request->cookie('key2'));
+        $this->assertNull(self::$request->cookie('key3'));
     }
 
-    public function testPost1()
+    public function testServer()
     {
-        $postArray = self::$request->post();
-        $this->assertSame($postArray, self::$post);
-    }
-
-    public function testPost2()
-    {
-        $postValue = self::$request->post('b');
-        $this->assertSame($postValue, self::$post['b']);
-    }
-
-    public function testPost3()
-    {
-        $postValue = self::$request->post('c');
-        $this->assertNull($postValue);
-    }
-
-    public function testCookie1()
-    {
-        $cookieArray = self::$request->cookie();
-        $this->assertSame($cookieArray, self::$cookie);
-    }
-
-    public function testCookie2()
-    {
-        $cookieValue = self::$request->cookie('key2');
-        $this->assertSame($cookieValue, self::$cookie['key2']);
-    }
-
-    public function testCookie3()
-    {
-        $cookieValue = self::$request->cookie('key3');
-        $this->assertNull($cookieValue);
-    }
-
-    public function testServer1()
-    {
-        $serverArray = self::$request->server();
-        $this->assertSame($serverArray, self::$server);
-    }
-
-    public function testServer2()
-    {
-        $serverValue = self::$request->server('REQUEST_METHOD');
-        $this->assertSame($serverValue, self::$server['REQUEST_METHOD']);
-    }
-
-    public function testServer3()
-    {
-        $serverValue = self::$request->server('someKey');
-        $this->assertNull($serverValue);
+        $this->assertSame(self::$server, self::$request->server());
+        $this->assertSame(self::$server['REQUEST_METHOD'], self::$request->server('REQUEST_METHOD'));
+        $this->assertNull(self::$request->server('someKey'));
     }
 
     public function testIsSecure()
@@ -120,64 +81,18 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($uri, self::$server['REQUEST_URI']);
     }
 
-    public function testIsCli()
+    public function testHelpMethods()
     {
-        $client = self::$request->isCli();
-        $this->assertFalse($client);
-    }
-
-    public function testIsAjax()
-    {
-        $ajax = self::$request->isAjax();
-        $this->assertTrue($ajax);
-    }
-
-    public function testIsGet()
-    {
-        $is = self::$request->isGet();
-        $this->assertFalse($is);
-    }
-
-    public function testIsPost()
-    {
-        $is = self::$request->isPost();
-        $this->assertTrue($is);
-    }
-
-    public function testIsPut()
-    {
-        $is = self::$request->isPut();
-        $this->assertFalse($is);
-    }
-
-    public function testIsDelete()
-    {
-        $is = self::$request->isDelete();
-        $this->assertFalse($is);
-    }
-
-    public function testIsHead()
-    {
-        $is = self::$request->isHead();
-        $this->assertFalse($is);
-    }
-
-    public function testIsOptions()
-    {
-        $is = self::$request->isOptions();
-        $this->assertFalse($is);
-    }
-
-    public function testScheme()
-    {
-        $scheme = self::$request->scheme();
-        $this->assertSame('https', $scheme);
-    }
-
-    public function testIsMobile()
-    {
-        $is = self::$request->isMobile();
-        $this->assertFalse($is);
+        $this->assertFalse(self::$request->isCli());
+        $this->assertTrue(self::$request->isAjax());
+        $this->assertFalse(self::$request->isGet());
+        $this->assertTrue(self::$request->isPost());
+        $this->assertFalse(self::$request->isPut());
+        $this->assertFalse(self::$request->isDelete());
+        $this->assertFalse(self::$request->isHead());
+        $this->assertFalse(self::$request->isOptions());
+        $this->assertSame('https', self::$request->scheme());
+        $this->assertFalse(self::$request->isMobile());
     }
 
     public function testMethod()
@@ -185,6 +100,21 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $request = new \System\Request(array('_method' => 'DELETE'), self::$post, self::$cookie, self::$server);
         $isDelete = $request->isDelete();
         $this->assertTrue($isDelete);
+    }
+
+    public function testHasMethods()
+    {
+        $this->assertTrue(self::$request->hasGet('a', 'b'));
+        $this->assertFalse(self::$request->hasGet('a', 'b', 'c'));
+        
+        $this->assertTrue(self::$request->hasPost('a', 'b'));
+        $this->assertFalse(self::$request->hasPost('a', 'c'));
+        
+        $this->assertTrue(self::$request->hasCookie('key1'));
+        $this->assertFalse(self::$request->hasCookie('key10'));
+        
+        $this->assertTrue(self::$request->hasServer('REQUEST_METHOD', 'HTTP_HOST'));
+        $this->assertFalse(self::$request->hasServer('a', 'c'));
     }
 
 }

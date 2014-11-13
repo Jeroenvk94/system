@@ -43,7 +43,7 @@ class DI implements \ArrayAccess
     public function set($offset, $value)
     {
         if (!strlen($offset)) {
-            throw new \DI\InvalidOffsetException('Invalid offset!');
+            throw new DI\InvalidOffsetException('Invalid offset!');
         }
 
         $this->keys[$offset] = true;
@@ -84,7 +84,7 @@ class DI implements \ArrayAccess
     {
         return $this->get('session');
     }
-    
+
     /**
      * 
      * @return System\Router
@@ -93,7 +93,7 @@ class DI implements \ArrayAccess
     {
         return $this->get('router');
     }
-    
+
     /**
      * 
      * @return System\Translator
@@ -102,7 +102,7 @@ class DI implements \ArrayAccess
     {
         return $this->get('t');
     }
-    
+
     /**
      * 
      * @return System\Request
@@ -110,6 +110,24 @@ class DI implements \ArrayAccess
     public function getRequest()
     {
         return $this->get('request');
+    }
+
+    /**
+     * 
+     * @return System\Auth
+     */
+    public function getAuth()
+    {
+        return $this->get('auth');
+    }
+    
+    /**
+     * 
+     * @return System\FlashMessages
+     */
+    public function getFlashMessages()
+    {
+        return $this->get('flashMessages');
     }
 
 }

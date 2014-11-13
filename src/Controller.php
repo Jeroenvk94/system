@@ -7,8 +7,8 @@ abstract class Controller
 
     protected $layoutTemplate = 'index.htm';
     protected $viewTemplate = 'index/index.htm';
-    public $view;
-    public $params = array();
+    protected $view;
+    protected $params = array();
 
     /**
      *
@@ -22,19 +22,28 @@ abstract class Controller
         $this->view = new \stdClass();
     }
 
+    /**
+     * init actions
+     */
     protected function init()
     {
-        //init actions
+        
     }
 
+    /**
+     * actions before call controller action
+     */
     protected function preAction()
     {
-        //actions before call controller action
+        
     }
 
+    /**
+     * actions after call controller action
+     */
     protected function postAction()
     {
-        //actions after call controller action
+        
     }
 
     public function response()
@@ -108,17 +117,19 @@ abstract class Controller
      * Get Request object
      * 
      * @return Request
-     * @throws DI\InvalidOffset
      */
     public function getRequest()
     {
-        $request = $this->di->get('request');
+        return $this->di->get('request');
+    }
 
-        if (!($request instanceof Request)) {
-            throw new DI\InvalidOffsetException("Request object not defined!");
-        }
-
-        return $request;
+    /**
+     * 
+     * @return DI
+     */
+    public function getDI()
+    {
+        return $this->di;
     }
 
     public function redirect($url, $statusCode = 302)
