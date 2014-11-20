@@ -1,4 +1,5 @@
 <?php
+
 namespace System;
 
 class DataTableRequest
@@ -12,6 +13,29 @@ class DataTableRequest
         'echo' => 0
     );
     private $allowedLength = array(10, 25, 50, 100);
+    protected $di;
+
+    public function __construct($di)
+    {
+        $this->di = $di;
+    }
+
+    /**
+     * Get Request object
+     * 
+     * @return \System\Request
+     * @throws DI\InvalidOffset
+     */
+    public function getRequest()
+    {
+        $request = $this->di->get('request');
+
+        if (!($request instanceof Request)) {
+            throw new DI\InvalidOffsetException("Request object not defined!");
+        }
+
+        return $request;
+    }
 
     public function setDisplayStart($displayStart)
     {
@@ -123,38 +147,44 @@ class DataTableRequest
         $this->result[$name] = $value;
     }
 
-    /**
-     * Hydrate the current object from a $_GET, $_POST, or $_REQUEST array
-     * 
-     * @param array $request
-     */
-    public function getRequest(array $request, $params = array(), $multisort = false)
+    public function buildSortColumnsFromRequest($multisort = false)
     {
-        $this->setDisplayLength($request['iDisplayLength']);
-        $this->setDisplayStart($request['iDisplayStart']);
-        $this->setEcho($request['sEcho']);
-        $this->setSearch(isset($request['sSearch']) ? $request['sSearch'] : null);
-
-        foreach ($params as $name) {
-            if (!isset($request[$name])) {
-                throw new Exception("Required Parameter '{$name}' not found in request!");
-            }
-
-            $this->setParam($name, $request[$name]);
-        }
-
-        $num = $request['iSortingCols'];
+        $num = $this->getRequest()->get('iSortingCols', 0);
 
         $sortCols = array();
 
-        for ($x = 0; $x < $num; $x++) {
-            $sortCols[$request['iSortCol_' . $x]] = ($request['sSortDir_' . $x] == 'asc') ? 'asc' : 'desc';
+        for ($i = 0; $i < $num; $i++) {
+            $sortCols[$this->getRequest()->get('iSortCol_' . $i)] = ($this->getRequest()->get('sSortDir_' . $i) == 'asc') ? 'asc' : 'desc';
             if (!$multisort) {
                 break;
             }
         }
 
         $this->setSortColumns($sortCols);
+    }
+
+    /**
+     * Build result - array of parameters from request
+     * 
+     * @param array $request
+     */
+    public function buildResult($requiredParams = array(), $multisort = false)
+    {
+        $this->setDisplayLength($this->getRequest()->get('iDisplayLength', 0));
+        $this->setDisplayStart($this->getRequest()->get('iDisplayStart', 0));
+        $this->setEcho($this->getRequest()->get('sEcho', 0));
+        $this->setSearch($this->getRequest()->get('sSearch', ''));
+
+        foreach ($requiredParams as $name) {
+            $value = $this->getRequest()->get($name);
+            if ($value === null) {
+                throw new DataTableRequest\ParameterNotFoundException("Required Parameter '{$name}' not found in request!");
+            }
+
+            $this->setParam($name, $value);
+        }
+
+        $this->buildSortColumnsFromRequest($multisort);
 
         return $this->result;
     }
@@ -164,12 +194,4 @@ class DataTableRequest
         return $this->result;
     }
 
-    public function buildEmptyResult()
-    {
-        return array(
-            'aaData' => array(),
-            'iTotalRecords' => 0,
-            'iTotalDisplayRecords' => 0
-        );
-    }
 }
