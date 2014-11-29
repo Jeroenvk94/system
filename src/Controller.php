@@ -84,7 +84,7 @@ abstract class Controller
     public function makeJSONResponse($data)
     {
         header('Content-Type: application/javascript');
-        echo json_encode($data);
+        echo @json_encode($data);
         die;
     }
 
