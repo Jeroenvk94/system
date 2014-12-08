@@ -20,7 +20,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
     protected $db;
     protected $ttl;
     protected $prefix = '';
-    protected $salt = '67d2d5eeae1';
+    static $salt = '67d2d5eeae1';
     protected $writeEmptyValue = false;
 
     public function __construct(PredisClient $db, $prefix = '', $writeEmptyValue = false)
