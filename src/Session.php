@@ -146,7 +146,7 @@ class Session implements \ArrayAccess
         return self::$started;
     }
 
-    public static function setSessionHandler(SessionHandlerInterface $sessionHandler)
+    public static function setSessionHandler(\SessionHandlerInterface $sessionHandler)
     {
         session_set_save_handler($sessionHandler);
     }

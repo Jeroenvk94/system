@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Session\Handler\RedisSessionHandler;
+namespace System\Session\Handler;
 
 use System\Session,
     Predis\Client as PredisClient;

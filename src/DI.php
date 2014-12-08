@@ -78,7 +78,7 @@ class DI implements \ArrayAccess
 
     /**
      * 
-     * @return System\Session
+     * @return \System\Session
      */
     public function getSession()
     {
@@ -87,7 +87,7 @@ class DI implements \ArrayAccess
 
     /**
      * 
-     * @return System\Router
+     * @return \System\Router
      */
     public function getRouter()
     {
@@ -96,7 +96,7 @@ class DI implements \ArrayAccess
 
     /**
      * 
-     * @return System\Translator
+     * @return \System\Translator
      */
     public function getTranslator()
     {
@@ -105,7 +105,7 @@ class DI implements \ArrayAccess
 
     /**
      * 
-     * @return System\Request
+     * @return \System\Request
      */
     public function getRequest()
     {
@@ -114,7 +114,7 @@ class DI implements \ArrayAccess
 
     /**
      * 
-     * @return System\Auth
+     * @return \System\Auth
      */
     public function getAuth()
     {
@@ -123,7 +123,7 @@ class DI implements \ArrayAccess
     
     /**
      * 
-     * @return System\FlashMessages
+     * @return \System\FlashMessages
      */
     public function getFlashMessages()
     {
