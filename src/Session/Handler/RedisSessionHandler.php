@@ -21,9 +21,9 @@ class RedisSessionHandler implements \SessionHandlerInterface
     protected $ttl;
     protected $prefix = '';
     protected $salt = '67d2d5eeae1';
-    protected $writeEmptyValue = true;
+    protected $writeEmptyValue = false;
 
-    public function __construct(PredisClient $db, $prefix = '', $writeEmptyValue = true)
+    public function __construct(PredisClient $db, $prefix = '', $writeEmptyValue = false)
     {
         $this->db = $db;
         $this->prefix = $prefix;
@@ -54,7 +54,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
     {
         $id = $this->prefix . $id;
 
-        if ($this->writeEmptyValue && strlen($data) === 0) {
+        if (!$this->writeEmptyValue && strlen($data) === 0) {
             $this->db->del($this->prefix . $id);
         } else {
             $this->db->set($id, $data);
