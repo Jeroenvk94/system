@@ -20,15 +20,13 @@ class RedisSessionHandler implements \SessionHandlerInterface
     protected $db;
     protected $ttl;
     protected $prefix = '';
-    protected $salt = '67d2d5eeae1';
-    protected $ignoreEmptyValue = false;
+    protected $salt = '67d2d5eeae1';    
 
-    public function __construct(PredisClient $db, $prefix = '', $ignoreEmptyValue = false)
+    public function __construct(PredisClient $db, $prefix = '')
     {
         $this->db = $db;
         $this->prefix = $prefix;
         $this->ttl = Session::getRememberMeTime();
-        $this->ignoreEmptyValue = $ignoreEmptyValue;
         Session::disableGarbageCollection();
     }
 
@@ -54,11 +52,9 @@ class RedisSessionHandler implements \SessionHandlerInterface
 
     public function write($id, $data)
     {
-        if ($this->ignoreEmptyValue && strlen($data) === 0) {
-            $id = $this->prefix . $id;
-            $this->db->set($id, $data);
-            $this->db->expire($id, $this->ttl);
-        }
+        $id = $this->prefix . $id;
+        $this->db->set($id, $data);
+        $this->db->expire($id, $this->ttl);
     }
 
     public function destroy($id)
