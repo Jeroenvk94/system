@@ -20,6 +20,7 @@ class Session implements \ArrayAccess
     private static $rememberMeTime = 1209600; // 2 weeks
     private static $started = false;
     private static $name = 'PHPSESSID';
+    private static $gcDisabled = false;
     public static $isUnitTesting = false;
 
     public static function setConfig($config)
@@ -35,6 +36,12 @@ class Session implements \ArrayAccess
         if (isset($config['rememberMeTime'])) {
             self::setRememberMeTime($config['rememberMeTime']);
         }
+    }
+
+    public static function disableGarbageCollection()
+    {
+        self::$gcDisabled = true;
+        return ini_set('session.gc_probability', 0);
     }
 
     public static function start()
@@ -57,6 +64,10 @@ class Session implements \ArrayAccess
 
     public static function setMaxLifeTime($time = 0)
     {
+        if (self::$gcDisabled) {
+            return;
+        }
+
         if ($time < static::$rememberMeTime) {
             $time = static::$rememberMeTime;
         }
@@ -71,17 +82,14 @@ class Session implements \ArrayAccess
         }
 
         session_set_cookie_params(
-                self::$cookieParams['lifetime'],
-                self::$cookieParams['path'],
-                self::$cookieParams['domain'],
-                self::$cookieParams['secure'],
-                self::$cookieParams['httpOnly']
+                self::$cookieParams['lifetime'], self::$cookieParams['path'], self::$cookieParams['domain'], self::$cookieParams['secure'], self::$cookieParams['httpOnly']
         );
     }
 
     public static function setRememberMeTime($time = 0)
     {
         self::$rememberMeTime = $time;
+        self::setMaxLifeTime();
     }
 
     public static function getName()
@@ -136,6 +144,16 @@ class Session implements \ArrayAccess
     public static function isStarted()
     {
         return self::$started;
+    }
+
+    public static function setSessionHandler(SessionHandlerInterface $sessionHandler)
+    {
+        session_set_save_handler($sessionHandler);
+    }
+
+    public static function getRememberMeTime()
+    {
+        return self::$rememberMeTime;
     }
 
     public function offsetSet($offset, $value)
