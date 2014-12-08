@@ -6,6 +6,7 @@ use System\Session;
 
 class FlashMessages
 {
+
     const INFO = 0;
     const WARNING = 1;
     const ERROR = 2;
@@ -41,32 +42,47 @@ class FlashMessages
         if (!($this->session instanceof Session)) {
             throw new DI\InvalidOffsetException("Session object not defined!");
         }
+    }
 
+    private function getStoredData()
+    {
         if (!isset($this->session[$this->sessionKey])) {
-            $this->clear();
+            return array();
+        }
+        
+        return $this->session[$this->sessionKey];
+    }
+
+    private function setStoreData($data)
+    {
+        if (count($data) === 0) {
+            unset($this->session[$this->sessionKey]);
+        } else {
+            $this->session[$this->sessionKey] = $data;
         }
     }
 
     public function clear()
     {
-        $this->session[$this->sessionKey] = array();
+        unset($this->session[$this->sessionKey]);
     }
 
     public function add($type, $message)
     {
-        $data = $this->session[$this->sessionKey];
+        $data = $this->getStoredData();
 
         array_push($data, array(
             'type' => (int) $type,
             'message' => $message
         ));
 
-        $this->session[$this->sessionKey] = $data;
+        $this->setStoreData($data);
     }
 
     public function hasData()
     {
-        return count($this->session[$this->sessionKey]) > 0;
+        $data = $this->getStoredData();
+        return count($data) > 0;
     }
 
     public function setStyles(array $styles)
@@ -77,7 +93,7 @@ class FlashMessages
     public function getData()
     {
         $result = array();
-        foreach ($this->session[$this->sessionKey] as $item) {
+        foreach ($this->getStoredData() as $item) {
             $result[] = array(
                 'message' => $item['message'],
                 'styles' => $this->styles[$item['type']]
