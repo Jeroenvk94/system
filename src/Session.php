@@ -12,7 +12,7 @@ class Session implements \ArrayAccess
 
     private static $cookieParams = array(
         'lifetime' => 0,
-        'path' => null,
+        'path' => '/',
         'domain' => null,
         'secure' => false,
         'httpOnly' => false
