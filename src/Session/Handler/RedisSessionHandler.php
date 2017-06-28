@@ -50,7 +50,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
         
         $value = $this->db->get($id);
         
-        if (is_null($value)) {
+        if (!is_string($value)) {
             return '';
         }
         
