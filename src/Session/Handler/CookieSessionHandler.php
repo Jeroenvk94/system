@@ -57,7 +57,7 @@ class CookieSessionHandler implements \SessionHandlerInterface
             return $this->getStoredData($id, $value);
         }
 
-        return null;
+        return '';
     }
 
     public function write($id, $data)
