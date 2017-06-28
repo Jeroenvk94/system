@@ -86,9 +86,6 @@ class RedisSessionHandler implements \SessionHandlerInterface
 
     public function close()
     {
-        $this->db = null;
-        unset($this->db);
-        
         return true;
     }
 
