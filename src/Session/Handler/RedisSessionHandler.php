@@ -48,7 +48,13 @@ class RedisSessionHandler implements \SessionHandlerInterface
     {
         $id = $this->prefix . $id;
         
-        return $this->db->get($id);
+        $value = $this->db->get($id);
+        
+        if (is_null($value)) {
+            return '';
+        }
+        
+        return $value;
     }
 
     public function write($id, $data)
