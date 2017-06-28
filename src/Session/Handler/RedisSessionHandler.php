@@ -47,6 +47,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
     public function read($id)
     {
         $id = $this->prefix . $id;
+        
         return $this->db->get($id);
     }
 
@@ -60,11 +61,15 @@ class RedisSessionHandler implements \SessionHandlerInterface
             $this->db->set($id, $data);
             $this->db->expire($id, $this->ttl);
         }
+        
+        return true;
     }
 
     public function destroy($id)
     {
         $this->db->del($this->prefix . $id);
+        
+        return true;
     }
 
     public function gc($maxLifetime)
@@ -77,6 +82,8 @@ class RedisSessionHandler implements \SessionHandlerInterface
     {
         $this->db = null;
         unset($this->db);
+        
+        return true;
     }
 
 }
