@@ -66,6 +66,8 @@ class CookieSessionHandler implements \SessionHandlerInterface
         $value = $raw . $this->getHashValue($id, $raw);
 
         setcookie($this->key, base64_encode($value), time() + $this->ttl, '/');
+        
+        return true;
     }
 
     private function getHashValue($id, $data)
@@ -99,7 +101,9 @@ class CookieSessionHandler implements \SessionHandlerInterface
 
     public function destroy($id)
     {
-        return setcookie($this->key, '', time());
+        setcookie($this->key, '', time());
+        
+        return true;
     }
 
     public function gc($maxLifetime)
